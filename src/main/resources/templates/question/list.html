@@ -1,10 +1,44 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+<link rel="stylesheet" type="text/css" th:href="@{css/style.css}">
+<link href="https://cdn.jsdelivr.net/npm/daisyui@4.0.3/dist/full.min.css" rel="stylesheet" type="text/css" />
+<script src="https://cdn.tailwindcss.com"></script>
 
-</body>
-</html>
+<!-- 질문 리스트 -->
+<table>
+    <thead>
+        <tr>
+            <th>번호</th>
+            <th>제목</th>
+            <th>날짜</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr th:each="question, loop : ${questionPaging}">
+            <td th:text="${questionPaging.getTotalElements - (questionPaging.number * questionPaging.size) - loop.index}" class="no"></td>
+            <td th:text="${question.title}"></td>
+            <td th:text="${#temporals.format(question.createDate, 'yy.MM.dd HH:mm')}"></td>
+        </tr>
+    </tbody>
+</table>
+
+<!-- 질문 페이징 -->
+<div class="join" th:if="${!questionPaging.isEmpty()}">
+    <button class="join-item btn btn-sm"
+            th:classappend="${questionPaging.number != 0} ? '' : 'btn-disabled'"
+            th:attr="onclick=|_question_page(1)|">«</button>
+    <button class="join-item btn btn-sm" th:each="page : ${#numbers.sequence(0, questionPaging.totalPages - 1)}"
+            th:if="${page >= questionPaging.number - 2 and page <= questionPaging.number + 2 and questionPaging.number > 1 and questionPaging.number < questionPaging.totalPages - 2}"
+            th:classappend="${page == questionPaging.number} ? 'btn-neutral' : ''"
+            th:attr="onclick=|_question_page('${page + 1}')|" th:text="${page + 1}"></button>
+    <button class="join-item btn btn-sm" th:each="page : ${#numbers.sequence(0, questionPaging.totalPages - 1)}"
+            th:if="${(questionPaging.number <= 1 and page <= 4) or (questionPaging.number >= questionPaging.totalPages - 2 and page >= questionPaging.totalPages - 5)}"
+            th:classappend="${page == questionPaging.number} ? 'btn-neutral' : ''"
+            th:attr="onclick=|_question_page('${page + 1}')|" th:text="${page + 1}"></button>
+    <button class="join-item btn btn-sm"
+            th:classappend="${questionPaging.number != questionPaging.totalPages - 1} ? '' : 'btn-disabled'"
+            th:attr="onclick=|_question_page('${questionPaging.totalPages}')|">»</button>
+</div>
+
+
+<button class="btn btn-sm" onclick="location.href='/question/create'">질문등록</button>
+
+<script type="text/javascript" th:src="@{/js/question/list.js}"></script>

@@ -3,11 +3,14 @@ package com.pintor.sbb_remind.question;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @Slf4j
 @RequestMapping("/question")
@@ -37,6 +40,22 @@ public class QuestionController {
         Question question = this.questionService.create(questionForm.getTitle(), questionForm.getContent());
         log.info("question has created");
 
-        return "redirect:/index";
+        return "redirect:/question";
+    }
+
+    @GetMapping("")
+    public String list(Model model, @RequestParam(value = "page", defaultValue = "1") int page) {
+
+        Page<Question> questionPaging = this.questionService.getList(page);
+
+        // 잘못된 페이지 접근 방어
+        if (questionPaging.isEmpty()) {
+            log.info("required page " + page + " does not exist");
+            return "redirect:/question";
+        }
+
+        model.addAttribute("questionPaging", questionPaging);
+
+        return "question/list";
     }
 }

@@ -1,6 +1,9 @@
 package com.pintor.sbb_remind.question;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 @RequiredArgsConstructor
@@ -19,5 +22,12 @@ public class QuestionService {
         this.questionRepository.save(question);
 
         return question;
+    }
+
+    public Page<Question> getList(int page) {
+
+        Pageable pageable = PageRequest.of(page - 1, 10);
+
+        return this.questionRepository.findAllByOrderByCreateDate(pageable);
     }
 }

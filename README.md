@@ -5,9 +5,12 @@
 - [x] #3 - index controller
 - [x] #4 - question & answer entity setup
 - [x] #5 - question create with form
-- [ ] #6 - question list with paging
-- [ ] #7 - answer create with form
-- [ ] #8 - navigation bar
-- [ ] #9 - security setup
-- [ ] #10 - member signup
-- [ ] #11 - member login
+- [x] #6 - question list with paging
+- [ ] #7 - question detail
+- [ ] #8 - answer create with form
+- [ ] #9 - answer list with paging
+- [ ] #10 - navigation bar
+- [ ] #11 - layout template setup
+- [ ] #12 - security setup
+- [ ] #13 - member signup
+- [ ] #14 - member login
