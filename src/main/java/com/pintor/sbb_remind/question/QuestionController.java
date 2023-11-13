@@ -7,10 +7,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 @Slf4j
 @RequestMapping("/question")
@@ -57,5 +54,14 @@ public class QuestionController {
         model.addAttribute("questionPaging", questionPaging);
 
         return "question/list";
+    }
+
+    @GetMapping("/{id}")
+    public String detail(Model model, @PathVariable("id") Long id) {
+
+        Question question = this.questionService.getById(id);
+        model.addAttribute("question", question);
+
+        return "question/detail";
     }
 }

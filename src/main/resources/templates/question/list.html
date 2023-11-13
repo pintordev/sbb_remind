@@ -14,7 +14,8 @@
     <tbody>
         <tr th:each="question, loop : ${questionPaging}">
             <td th:text="${questionPaging.getTotalElements - (questionPaging.number * questionPaging.size) - loop.index}" class="no"></td>
-            <td th:text="${question.title}"></td>
+            <td class="cursor-pointer hover:text-white hover:bg-[#2b3440]" th:text="${question.title}"
+                th:attr="onclick=|_question_detail('${question.id}')|"></td>
             <td th:text="${#temporals.format(question.createDate, 'yy.MM.dd HH:mm')}"></td>
         </tr>
     </tbody>

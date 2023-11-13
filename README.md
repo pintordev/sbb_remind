@@ -6,7 +6,7 @@
 - [x] #4 - question & answer entity setup
 - [x] #5 - question create with form
 - [x] #6 - question list with paging
-- [ ] #7 - question detail
+- [x] #7 - question detail
 - [ ] #8 - answer create with form
 - [ ] #9 - answer list with paging
 - [ ] #10 - navigation bar
@@ -14,3 +14,18 @@
 - [ ] #12 - security setup
 - [ ] #13 - member signup
 - [ ] #14 - member login
+- [ ] #15 - add author column to question & answer
+- [ ] #16 - question & answer modify
+- [ ] #17 - question & answer delete
+- [ ] #18 - question & answer like
+- [ ] #19 - question hit
+- [ ] #20 - question categorizing
+- [ ] #21 - update detail information to be open
+- [ ] #22 - search
+- [ ] #23 - markdown & editor
+- [ ] #24 - anchor tag
+- [ ] #25 - kakao social login
+- [ ] #26 - comment update
+- [ ] #27 - recent answer & comment at index page
+- [ ] #28 - profile page
+- [ ] #29 - password find & modify

@@ -1,5 +1,6 @@
 package com.pintor.sbb_remind.question;
 
+import com.pintor.sbb_remind.exception.DataNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -29,5 +30,11 @@ public class QuestionService {
         Pageable pageable = PageRequest.of(page - 1, 10);
 
         return this.questionRepository.findAllByOrderByCreateDate(pageable);
+    }
+
+    public Question getById(Long id) {
+
+        return this.questionRepository.findById(id)
+                .orElseThrow(() -> new DataNotFoundException("question not found"));
     }
 }
