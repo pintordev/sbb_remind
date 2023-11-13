@@ -1,0 +1,16 @@
+<div th:fragment="questionFormFragment">
+
+    <form th:object="${questionForm}" method="post" id="questionForm">
+
+        <h2>제목</h2>
+        <div th:if="${#fields.hasErrors('title')}" th:errors="*{title}" style="color:red;"></div>
+        <input type="text" th:field="*{title}" placeholder="제목을 입력하세요">
+
+        <div>
+            <h2>내용</h2>
+            <div th:if="${#fields.hasErrors('content')}" th:errors="*{content}" style="color:red;"></div>
+        </div>
+        <textarea th:field="*{content}" cols="30" rows="10" placeholder="내용을 입력하세요"></textarea>
+
+    </form>
+</div>
