@@ -3,7 +3,7 @@
 - [x] #1 - base setting
 - [x] #2 - base entity
 - [x] #3 - index controller
-- [ ] #4 - question & answer entity setup
+- [x] #4 - question & answer entity setup
 - [ ] #5 - question register with form
 - [ ] #6 - answer register with form
 - [ ] #7 - question list with paging
