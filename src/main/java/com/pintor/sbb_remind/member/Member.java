@@ -2,8 +2,11 @@ package com.pintor.sbb_remind.member;
 
 import com.pintor.sbb_remind.base.BaseEntity;
 import com.pintor.sbb_remind.security.MemberAuthority;
+import com.pintor.sbb_remind.social_account.SocialAccount;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.OneToMany;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -14,6 +17,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 @Getter
 @SuperBuilder(toBuilder = true)
@@ -44,6 +48,9 @@ public class Member extends BaseEntity {
     private String email;
 
     private LocalDateTime lastLoginDate;
+
+    @OneToMany(mappedBy = "parent", cascade = CascadeType.REMOVE)
+    private List<SocialAccount> socialAccountList;
 
     public Collection<? extends GrantedAuthority> getAuthorities() {
 

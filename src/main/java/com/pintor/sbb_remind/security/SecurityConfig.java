@@ -19,6 +19,7 @@ public class SecurityConfig {
 
     private final SuccessHandler successHandler;
     private final FailureHandler failureHandler;
+    private final MemberSecurityService memberSecurityService;
 
     @Bean
     SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -34,6 +35,12 @@ public class SecurityConfig {
                         .logoutRequestMatcher(new AntPathRequestMatcher("/member/logout"))
                         .logoutSuccessUrl("/")
                         .invalidateHttpSession(true))
+                .oauth2Login((oauth2Login) -> oauth2Login
+                        .loginPage("/member/login")
+                        .successHandler(successHandler)
+                        .failureHandler(failureHandler)
+                        .userInfoEndpoint((userInfoEndpointConfig)
+                                -> userInfoEndpointConfig.userService(memberSecurityService)))
         ;
         return http.build();
     }

@@ -1,0 +1,2 @@
+# INCLUDING PROFILE
+spring.profiles.include=dev
