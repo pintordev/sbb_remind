@@ -40,6 +40,7 @@ public class QuestionController {
         }
 
         Question question = this.questionService.create(questionForm.getTitle(), questionForm.getContent());
+
         log.info("question has created");
 
         return "redirect:/question";

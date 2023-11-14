@@ -12,8 +12,8 @@
 - [x] #10 - layout template setup
 - [x] #11 - navigation bar
 - [x] #12 - security setup
-- [ ] #13 - member signup
-- [ ] #14 - member login
+- [x] #13 - member sign up with email authentication
+- [ ] #14 - member login & logout
 - [ ] #15 - kakao social login
 - [ ] #16 - add author column to question & answer
 - [ ] #17 - question & answer modify

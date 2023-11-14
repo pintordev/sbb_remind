@@ -1,7 +1,7 @@
 <div th:fragment="answerListFragment">
     <!-- 답변 리스트 -->
     <a id="answer_start"></a>
-    <div th:if="${#lists.size(question.answerList) > 0}" th:each="answer : ${question.answerList}" th:id="|answer_${answer.id}|">
+    <div th:if="${#lists.size(answerPaging) > 0}" th:each="answer : ${answerPaging}" th:id="|answer_${answer.id}|">
         <span th:text="${answer.content}"></span>
         <span th:text="${#temporals.format(answer.createDate, 'yy.MM.dd HH:mm')}"></span>
     </div>

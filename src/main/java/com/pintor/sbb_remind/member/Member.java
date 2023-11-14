@@ -1,0 +1,64 @@
+package com.pintor.sbb_remind.member;
+
+import com.pintor.sbb_remind.base.BaseEntity;
+import com.pintor.sbb_remind.security.MemberAuthority;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Collection;
+
+@Getter
+@SuperBuilder(toBuilder = true)
+@NoArgsConstructor
+@AllArgsConstructor
+@Entity
+public class Member extends BaseEntity {
+
+    private Integer authority;
+
+    private boolean isEmailAuthenticated;
+
+    private String emailAuthenticationCode;
+
+    private boolean hasTempPassword;
+
+    @Column(unique = true)
+    private String loginId;
+
+    private String password;
+
+    @Column(unique = true)
+    private String nickName;
+
+    private String userName;
+
+    @Column(unique = true)
+    private String email;
+
+    private LocalDateTime lastLoginDate;
+
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+
+        Collection<GrantedAuthority> authorities = new ArrayList<>();
+
+        int binLen = MemberAuthority.values().length;
+        String authority = Integer.toBinaryString(this.authority);
+        authority = "0".repeat(binLen - authority.length()) + authority;
+
+        for (int i = 0; i < authority.length(); i++) {
+            if (authority.charAt(authority.length() - i - 1) == '1') {
+                authorities.add(new SimpleGrantedAuthority(MemberAuthority.getTypeByCode(i)));
+            }
+        }
+
+        return authorities;
+    }
+}

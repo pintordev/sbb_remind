@@ -8,7 +8,7 @@ import lombok.Setter;
 @Setter
 public class AnswerForm {
 
-    @NotEmpty(message = "내용은 필수로 입력되어야 합니다")
+    @NotEmpty(message = "내용은 필수로 입력해주세요")
     private String content;
 
     private Long questionId;

@@ -6,11 +6,11 @@ function _answer_create(questionId) {
         url: "/answer/create",
         type: "POST",
         data: $("#answerForm").serialize(),
-//            beforeSend : function() {
-//                var token = $("meta[name='_csrf']").attr("content");
-//                var header = $("meta[name='_csrf_header']").attr("content");
-//                $(document).ajaxSend(function(e, xhr, options) { xhr.setRequestHeader(header, token); });
-//            },
+        beforeSend : function() {
+            var token = $("meta[name='_csrf']").attr("content");
+            var header = $("meta[name='_csrf_header']").attr("content");
+            $(document).ajaxSend(function(e, xhr, options) { xhr.setRequestHeader(header, token); });
+        },
         success: function(res) {
             console.log(res.code + ": " + res.message);
 
