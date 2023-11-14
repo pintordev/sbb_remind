@@ -11,19 +11,19 @@
 - [x] #9 - answer list with paging
 - [x] #10 - layout template setup
 - [x] #11 - navigation bar
-- [ ] #12 - security setup
+- [x] #12 - security setup
 - [ ] #13 - member signup
 - [ ] #14 - member login
-- [ ] #15 - add author column to question & answer
-- [ ] #16 - question & answer modify
-- [ ] #17 - question & answer delete
-- [ ] #18 - question & answer like
-- [ ] #19 - question hit
-- [ ] #20 - question categorizing
-- [ ] #21 - update detail information to be open
-- [ ] #22 - search
-- [ ] #23 - markdown & editor
-- [ ] #24 - kakao social login
+- [ ] #15 - kakao social login
+- [ ] #16 - add author column to question & answer
+- [ ] #17 - question & answer modify
+- [ ] #18 - question & answer delete
+- [ ] #19 - question & answer like
+- [ ] #20 - question hit
+- [ ] #21 - question categorizing
+- [ ] #22 - update detail information to be open
+- [ ] #23 - search
+- [ ] #24 - markdown & editor
 - [ ] #25 - comment update
 - [ ] #26 - recent answer & comment at index page
 - [ ] #27 - profile page
