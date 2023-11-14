@@ -31,7 +31,7 @@ public class AnswerController {
     @ResponseBody
     public ResponseEntity create(@Valid AnswerForm answerForm, BindingResult bindingResult) {
 
-        log.info("question create request");
+        log.info("answer create request");
         log.info("content: " + answerForm.getContent());
         log.info("questionId: " + answerForm.getQuestionId());
 
@@ -43,6 +43,8 @@ public class AnswerController {
         Question question = this.questionService.getById(answerForm.getQuestionId());
 
         Answer answer = this.answerService.create(answerForm.getContent(), question);
+
+        log.info("answer has created on question #" + question.getId());
 
         Map<String, Object> answerAttributes = new HashMap<>();
 

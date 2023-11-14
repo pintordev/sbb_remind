@@ -23,9 +23,8 @@
 - [ ] #21 - update detail information to be open
 - [ ] #22 - search
 - [ ] #23 - markdown & editor
-- [ ] #24 - anchor tag
-- [ ] #25 - kakao social login
-- [ ] #26 - comment update
-- [ ] #27 - recent answer & comment at index page
-- [ ] #28 - profile page
-- [ ] #29 - password find & modify
+- [ ] #24 - kakao social login
+- [ ] #25 - comment update
+- [ ] #26 - recent answer & comment at index page
+- [ ] #27 - profile page
+- [ ] #28 - password find & modify

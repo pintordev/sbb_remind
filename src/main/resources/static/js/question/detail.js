@@ -13,7 +13,6 @@ function _answer_create(questionId) {
 //            },
         success: function(res) {
             console.log(res.code + ": " + res.message);
-            console.log(res.data);
 
             let anchor_tag = "answer_" + res.data.id;
             let content = res.data.content;
@@ -28,7 +27,8 @@ function _answer_create(questionId) {
                 </div>
             `;
 
-            $("#answer-anchor").append(template);
+            $("#answer_last").append(template);
+            $("#answerForm > #content").val("");
         },
         error: function(res) {
             console.log(res.responseJSON.code + ": " + res.responseJSON.message);
@@ -36,4 +36,8 @@ function _answer_create(questionId) {
         }
     })
 
+}
+
+function _answer_page(questionId, page) {
+    location.href = '/question/' + questionId + '?aPage=' + page;
 }
