@@ -1,16 +1,18 @@
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-<link rel="stylesheet" type="text/css" th:href="@{css/style.css}">
-<link href="https://cdn.jsdelivr.net/npm/daisyui@4.0.3/dist/full.min.css" rel="stylesheet" type="text/css" />
-<script src="https://cdn.tailwindcss.com"></script>
+<html layout:decorate="~{/layout/layout}">
+<div layout:fragment="content">
+    <!-- 구현 Start -->
+    <h1 th:text="${question.title}"></h1>
+    <div th:text="${#temporals.format(question.createDate, 'yy.MM.dd HH:mm')}"></div>
+    <div th:text="${question.content}"></div>
 
-<h1 th:text="${question.title}"></h1>
-<div th:text="${#temporals.format(question.createDate, 'yy.MM.dd HH:mm')}"></div>
-<div th:text="${question.content}"></div>
+    <!-- 답변 목록 -->
+    <div th:replace="~{answer/fragment/list :: answerListFragment}"></div>
 
-<!-- 답변 목록 -->
-<div th:replace="~{answer/fragment/list :: answerListFragment}"></div>
-
-<!-- 답변 폼 -->
-<div th:replace="~{answer/fragment/form :: answerFormFragment}"></div>
-
-<script type="text/javascript" th:src="@{/js/question/detail.js}"></script>
+    <!-- 답변 폼 -->
+    <div th:replace="~{answer/fragment/form :: answerFormFragment}"></div>
+    <!-- 구현 End -->
+</div>
+<!-- 스크립트 영역 Start -->
+<script layout:fragment="script" th:src="@{/js/question/detail.js}"></script>
+<!-- 스크립트 영역 End -->
+</html>

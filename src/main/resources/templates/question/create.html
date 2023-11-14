@@ -1,11 +1,16 @@
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<html layout:decorate="~{/layout/layout}">
+<div layout:fragment="content">
+    <!-- 구현 Start -->
+    <h1>질문 등록</h1>
 
-<h1>질문 등록</h1>
+    <!-- 질문 폼 -->
+    <div th:replace="~{question/fragment/form :: questionFormFragment}"></div>
 
-<!-- 질문 폼 -->
-<div th:replace="~{question/fragment/form :: questionFormFragment}"></div>
-
-<button th:onclick="_question_create()">질문등록</button>
-<button onclick="location.href='/question'">취소</button>
-
-<script type="text/javascript" th:src="@{/js/question/create.js}"></script>
+    <button th:onclick="_question_create()">질문등록</button>
+    <button onclick="location.href='/question'">취소</button>
+    <!-- 구현 End -->
+</div>
+<!-- 스크립트 영역 Start -->
+<script layout:fragment="script" th:src="@{/js/question/create.js}"></script>
+<!-- 스크립트 영역 End -->
+</html>

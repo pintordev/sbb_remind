@@ -8,9 +8,9 @@
 - [x] #6 - question list with paging
 - [x] #7 - question detail
 - [x] #8 - answer create with form
-- [ ] #9 - answer list with paging
-- [ ] #10 - navigation bar
-- [ ] #11 - layout template setup
+- [x] #9 - answer list with paging
+- [x] #10 - layout template setup
+- [ ] #11 - navigation bar
 - [ ] #12 - security setup
 - [ ] #13 - member signup
 - [ ] #14 - member login
