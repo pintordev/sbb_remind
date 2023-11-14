@@ -1,0 +1,52 @@
+<html layout:decorate="~{/layout/wo_navbar}">
+<div layout:fragment="content">
+    <!-- 구현 Start -->
+    <div class="flex-grow flex items-center justify-center py-5">
+        <div class="max-w-2xl w-full px-4">
+            <h1 class="mb-4">
+                <i class="fa-solid fa-right-to-bracket"></i>
+                로그인
+            </h1>
+
+            <form th:action="@{/member/login}" id="loginForm" method="post" class="flex flex-col gap-6">
+                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+
+                <div class="form-control">
+                    <label class="label">
+                        <span class="label-text">아이디</span>
+                        <span class="label-text text-red-400" th:if="${errors.containsKey('loginId')}" th:text="${errors.get('loginId')}"></span>
+                    </label>
+                    <input type="text" id="loginId" name="loginId" placeholder="아이디" class="input input-bordered" autofocus />
+                </div>
+
+                <div class="form-control">
+                    <label class="label">
+                        <span class="label-text">비밀번호</span>
+                        <span class="label-text text-red-400" th:if="${errors.containsKey('password')}" th:text="${errors.get('password')}"></span>
+                    </label>
+                    <input type="password" id="password" name="password" placeholder="비밀번호" class="input input-bordered" />
+                </div>
+
+                <button type="button" th:onclick="_login()" class="btn btn-block btn-outline border-gray-300 gap-1">
+                    <i class="fa-solid fa-right-to-bracket"></i>
+                    <span>로그인</span>
+                </button>
+
+                <a href="/" class="btn btn-block btn-outline border-gray-300 gap-1">
+                    <i class="fa-solid fa-house"></i>
+                    <span>메인화면</span>
+                </a>
+
+                <div class="flex flex-wrap justify-center">
+                    <a href="/member/signUp" class="btn btn-link text-[color:gray]">회원가입</a>
+                    <a href="/member/find" class="btn btn-link text-[color:gray]">아이디/비밀번호 찾기</a>
+                </div>
+            </form>
+        </div>
+    </div>
+    <!-- 구현 End -->
+</div>
+<!-- 스크립트 영역 Start -->
+<script layout:fragment="script" th:src="@{/js/member/login.js}"></script>
+<!-- 스크립트 영역 End -->
+</html>

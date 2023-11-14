@@ -13,7 +13,7 @@
 - [x] #11 - navigation bar
 - [x] #12 - security setup
 - [x] #13 - member sign up with email authentication
-- [ ] #14 - member login & logout
+- [x] #14 - member login & logout
 - [ ] #15 - kakao social login
 - [ ] #16 - add author column to question & answer
 - [ ] #17 - question & answer modify

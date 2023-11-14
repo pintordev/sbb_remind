@@ -1,15 +1,17 @@
 package com.pintor.sbb_remind.member;
 
 import com.pintor.sbb_remind.mail.MailService;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.HashMap;
+import java.util.Map;
 
 @Slf4j
 @RequestMapping("/member")
@@ -79,6 +81,26 @@ public class MemberController {
         this.mailService.send(member.getEmail(), codeBits[0], "이메일 인증");
 
         return "redirect:/member/login";
+    }
+
+    @GetMapping("/login")
+    public String login(Model model, HttpServletRequest request,
+                        @RequestParam(value = "error", defaultValue = "") String error,
+                        @RequestParam(value = "field", defaultValue = "") String field) {
+
+        String refererUri = request.getHeader("Referer");
+        log.info("referer: " + refererUri);
+
+        if (refererUri != null && !refererUri.contains("/member/login")
+                && !refererUri.contains("/member/signUp") && !refererUri.contains("/member/find")) {
+            request.getSession().setAttribute("refererUri", refererUri);
+        }
+
+        Map<String, String> errors = new HashMap<>();
+        errors.put(field, error);
+        model.addAttribute("errors", errors);
+
+        return "member/login";
     }
 
     @GetMapping("/authenticate/{emailAuthenticationCode}")
