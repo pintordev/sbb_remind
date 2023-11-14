@@ -10,7 +10,7 @@
 - [x] #8 - answer create with form
 - [x] #9 - answer list with paging
 - [x] #10 - layout template setup
-- [ ] #11 - navigation bar
+- [x] #11 - navigation bar
 - [ ] #12 - security setup
 - [ ] #13 - member signup
 - [ ] #14 - member login
