@@ -1,6 +1,7 @@
 package com.pintor.sbb_remind.question;
 
 import com.pintor.sbb_remind.exception.DataNotFoundException;
+import com.pintor.sbb_remind.member.Member;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -13,11 +14,12 @@ public class QuestionService {
 
     private final QuestionRepository questionRepository;
 
-    public Question create(String title, String content) {
+    public Question create(String title, String content, Member author) {
 
         Question question = Question.builder()
                 .title(title)
                 .content(content)
+                .author(author)
                 .build();
 
         this.questionRepository.save(question);

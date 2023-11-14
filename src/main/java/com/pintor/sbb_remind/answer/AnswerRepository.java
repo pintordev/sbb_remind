@@ -12,7 +12,6 @@ public interface AnswerRepository extends JpaRepository<Answer, Long> {
             + "from answer a "
             + "where a.question_id = :question_id "
             + "order by a.create_date asc "
-            , countQuery = "select count(*) from answer"
             , nativeQuery = true)
-    Page<Answer> findAllByOrderByCreateDate(@Param("question_id") Long questionId, Pageable pageable);
+    Page<Answer> findAllByQuestionOrderByCreateDate(@Param("question_id") Long questionId, Pageable pageable);
 }

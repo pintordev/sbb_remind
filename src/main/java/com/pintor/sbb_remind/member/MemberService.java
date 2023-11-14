@@ -62,6 +62,11 @@ public class MemberService {
         return this.memberRepository.existsByEmail(email);
     }
 
+    public Member getByLoginId(String loginId) {
+        return this.memberRepository.findByLoginId(loginId)
+                .orElse(null);
+    }
+
     public Member getByEmailAuthenticationCode(String emailAuthenticationCode) {
         return this.memberRepository.findByEmailAuthenticationCode(emailAuthenticationCode)
                 .orElse(null);

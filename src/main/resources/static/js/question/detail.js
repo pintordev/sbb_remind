@@ -18,6 +18,8 @@ function _answer_create(questionId) {
             let content = res.data.content;
             let createDate = res.data.createDate;
 
+            console.log(res);
+
             let template = `
                 <div>
                     <div id="${anchor_tag}">

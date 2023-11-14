@@ -10,7 +10,6 @@ public interface QuestionRepository extends JpaRepository<Question, Long> {
     @Query(value = "select * "
             + "from question q "
             + "order by q.create_date desc "
-            , countQuery = "select count(*) from question"
             , nativeQuery = true)
     Page<Question> findAllByOrderByCreateDate(Pageable pageable);
 }

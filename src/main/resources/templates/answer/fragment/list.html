@@ -7,6 +7,8 @@
     </div>
     <a id="answer_last"></a>
 
+    <div th:text="${answerPaging.totalPages}"></div>
+
     <!-- 답변 페이징 -->
     <div class="join" th:if="${!answerPaging.isEmpty()}">
         <button class="join-item btn btn-sm"

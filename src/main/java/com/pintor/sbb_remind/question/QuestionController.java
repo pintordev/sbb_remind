@@ -3,14 +3,19 @@ package com.pintor.sbb_remind.question;
 import com.pintor.sbb_remind.answer.Answer;
 import com.pintor.sbb_remind.answer.AnswerForm;
 import com.pintor.sbb_remind.answer.AnswerService;
+import com.pintor.sbb_remind.member.Member;
+import com.pintor.sbb_remind.member.MemberService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+
+import java.security.Principal;
 
 @Slf4j
 @RequestMapping("/question")
@@ -20,15 +25,19 @@ public class QuestionController {
 
     private final QuestionService questionService;
     private final AnswerService answerService;
+    private final MemberService memberService;
 
+    @PreAuthorize("isAuthenticated()")
     @GetMapping("/create")
     public String create(QuestionForm questionForm) {
 
         return "question/create";
     }
 
+    @PreAuthorize("isAuthenticated()")
     @PostMapping("/create")
-    public String create(@Valid QuestionForm questionForm, BindingResult bindingResult) {
+    public String create(@Valid QuestionForm questionForm, BindingResult bindingResult,
+                         Principal principal) {
 
         log.info("question create request");
         log.info("title: " + questionForm.getTitle());
@@ -39,11 +48,12 @@ public class QuestionController {
             return "question/create";
         }
 
-        Question question = this.questionService.create(questionForm.getTitle(), questionForm.getContent());
+        Member author = this.memberService.getByLoginId(principal.getName());
+        Question question = this.questionService.create(questionForm.getTitle(), questionForm.getContent(), author);
 
         log.info("question has created");
 
-        return "redirect:/question";
+        return String.format("redirect:/question/" + question.getId());
     }
 
     @GetMapping("")
@@ -67,6 +77,8 @@ public class QuestionController {
                          AnswerForm answerForm,
                          @RequestParam(value = "aPage", defaultValue = "1") int aPage) {
 
+        log.info("aPage: " + aPage);
+
         // 잘못된 페이지 접근 방어
         if (aPage < 1) {
             log.info("required page " + aPage + " has invalid value");
@@ -76,7 +88,10 @@ public class QuestionController {
         Question question = this.questionService.getById(id);
         model.addAttribute("question", question);
 
-        Page<Answer> answerPaging = this.answerService.getList(id, aPage);
+        Page<Answer> answerPaging = this.answerService.getList(question, aPage);
+
+        log.info("question id: " + question.getId());
+        log.info("total elements: " + answerPaging.getTotalElements());
 
         // 잘못된 페이지 접근 방어
         if (answerPaging.isEmpty() && aPage > 1) {
