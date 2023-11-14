@@ -5,7 +5,7 @@
 <!-- 질문 폼 -->
 <div th:replace="~{question/fragment/form :: questionFormFragment}"></div>
 
-<button th:onclick="_question_register()">질문등록</button>
+<button th:onclick="_question_create()">질문등록</button>
 <button onclick="location.href='/question'">취소</button>
 
 <script type="text/javascript" th:src="@{/js/question/create.js}"></script>

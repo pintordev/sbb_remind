@@ -1,0 +1,7 @@
+<div th:fragment="answerListFragment">
+    <div th:if="${#lists.size(question.answerList) > 0}" th:each="answer : ${question.answerList}" th:id="|answer_${answer.id}|">
+        <span th:text="${answer.content}"></span>
+        <span th:text="${#temporals.format(answer.createDate, 'yy.MM.dd HH:mm')}"></span>
+    </div>
+    <div id="answer-anchor"></div>
+</div>

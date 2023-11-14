@@ -1,3 +1,13 @@
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+
 <h1 th:text="${question.title}"></h1>
 <div th:text="${#temporals.format(question.createDate, 'yy.MM.dd HH:mm')}"></div>
 <div th:text="${question.content}"></div>
+
+<!-- 답변 목록 -->
+<div th:replace="~{answer/fragment/list :: answerListFragment}"></div>
+
+<!-- 답변 폼 -->
+<div th:replace="~{answer/fragment/form :: answerFormFragment}"></div>
+
+<script type="text/javascript" th:src="@{/js/question/detail.js}"></script>

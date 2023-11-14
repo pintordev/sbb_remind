@@ -1,5 +1,6 @@
 package com.pintor.sbb_remind.question;
 
+import com.pintor.sbb_remind.answer.AnswerForm;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -26,6 +27,7 @@ public class QuestionController {
     @PostMapping("/create")
     public String create(@Valid QuestionForm questionForm, BindingResult bindingResult) {
 
+        log.info("question create request");
         log.info("title: " + questionForm.getTitle());
         log.info("content: " + questionForm.getContent());
 
@@ -57,7 +59,8 @@ public class QuestionController {
     }
 
     @GetMapping("/{id}")
-    public String detail(Model model, @PathVariable("id") Long id) {
+    public String detail(Model model, @PathVariable("id") Long id,
+                         AnswerForm answerForm) {
 
         Question question = this.questionService.getById(id);
         model.addAttribute("question", question);

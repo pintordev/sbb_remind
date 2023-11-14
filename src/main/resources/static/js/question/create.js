@@ -1,3 +1,3 @@
-function _question_register() {
+function _question_create() {
     $("#questionForm").submit();
 }

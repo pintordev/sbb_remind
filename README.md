@@ -7,7 +7,7 @@
 - [x] #5 - question create with form
 - [x] #6 - question list with paging
 - [x] #7 - question detail
-- [ ] #8 - answer create with form
+- [x] #8 - answer create with form
 - [ ] #9 - answer list with paging
 - [ ] #10 - navigation bar
 - [ ] #11 - layout template setup
