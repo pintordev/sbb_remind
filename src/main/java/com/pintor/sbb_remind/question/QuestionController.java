@@ -9,11 +9,13 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.security.Principal;
 
@@ -102,5 +104,51 @@ public class QuestionController {
         model.addAttribute("answerPaging", answerPaging);
 
         return "question/detail";
+    }
+
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping("/modify/{id}")
+    public String modify(QuestionForm questionForm,
+                         @PathVariable("id") Long id,
+                         Principal principal) {
+
+        Question question = this.questionService.getById(id);
+
+        if (!question.getAuthor().getLoginId().equals(principal.getName())) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "해당 질문에 대한 수정 권한이 없습니다");
+        }
+
+        questionForm.setTitle(question.getTitle());
+        questionForm.setContent(question.getContent());
+
+        return "question/modify";
+    }
+
+    @PreAuthorize("isAuthenticated()")
+    @PostMapping("/modify/{id}")
+    public String modify(@Valid QuestionForm questionForm, BindingResult bindingResult,
+                         @PathVariable("id") Long id,
+                         Principal principal) {
+
+        Question question = this.questionService.getById(id);
+
+        if (!question.getAuthor().getLoginId().equals(principal.getName())) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "해당 질문에 대한 수정 권한이 없습니다");
+        }
+
+        log.info("question modify request");
+        log.info("title: " + questionForm.getTitle());
+        log.info("content: " + questionForm.getContent());
+
+        if (bindingResult.hasErrors()) {
+
+            return "question/modify";
+        }
+
+        question = this.questionService.modify(question, questionForm.getTitle(), questionForm.getContent());
+
+        log.info("question has modified");
+
+        return String.format("redirect:/question/" + question.getId());
     }
 }

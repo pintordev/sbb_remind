@@ -39,4 +39,16 @@ public class QuestionService {
         return this.questionRepository.findById(id)
                 .orElseThrow(() -> new DataNotFoundException("question not found"));
     }
+
+    public Question modify(Question question, String title, String content) {
+
+        question = question.toBuilder()
+                .title(title)
+                .content(content)
+                .build();
+
+        this.questionRepository.save(question);
+
+        return question;
+    }
 }

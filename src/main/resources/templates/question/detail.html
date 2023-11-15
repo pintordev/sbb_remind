@@ -5,11 +5,25 @@
     <div th:text="${#temporals.format(question.createDate, 'yy.MM.dd HH:mm')}"></div>
     <div th:text="${question.content}"></div>
 
+    <!-- 질문 수정 -->
+    <a sec:authorize="isAuthenticated()" th:href="@{|/question/modify/${question.id}|}"
+       th:if="${question.author != null and question.author.loginId == #authentication.getPrincipal().getUsername()}"
+       class="btn btn-sm btn-outline border-gray-300 gap-1">
+        <i class="fa-solid fa-eraser"></i>
+        <span>수정</span>
+    </a>
+
     <!-- 답변 목록 -->
     <div th:replace="~{answer/fragment/list :: answerListFragment}"></div>
 
     <!-- 답변 폼 -->
-    <div th:replace="~{answer/fragment/form :: answerFormFragment}"></div>
+    <form th:object="${answerForm}" method="post" id="answerForm">
+        <textarea th:field="*{content}" cols="30" rows="10" placeholder="내용을 입력하세요"></textarea>
+        <input type="hidden" th:field="*{questionId}">
+    </form>
+    <button class="btn btn-sm btn-outline border-gray-300 gap-1"
+            th:attr="onclick=|_answer_create('${question.id}')|">답변등록</button>
+
     <!-- 구현 End -->
 </div>
 <!-- 스크립트 영역 Start -->

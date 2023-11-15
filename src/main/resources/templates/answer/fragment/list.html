@@ -4,10 +4,15 @@
     <div th:if="${#lists.size(answerPaging) > 0}" th:each="answer : ${answerPaging}" th:id="|answer_${answer.id}|">
         <span th:text="${answer.content}"></span>
         <span th:text="${#temporals.format(answer.createDate, 'yy.MM.dd HH:mm')}"></span>
+        <!-- 답변 수정 -->
+        <a sec:authorize="isAuthenticated()" th:href="@{|/answer/modify/${answer.id}|}"
+           th:if="${answer.author != null and answer.author.loginId == #authentication.getPrincipal().getUsername()}"
+           class="btn btn-sm btn-outline border-gray-300 gap-1">
+            <i class="fa-solid fa-eraser"></i>
+            <span>수정</span>
+        </a>
     </div>
     <a id="answer_last"></a>
-
-    <div th:text="${answerPaging.totalPages}"></div>
 
     <!-- 답변 페이징 -->
     <div class="join" th:if="${!answerPaging.isEmpty()}">

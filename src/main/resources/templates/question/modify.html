@@ -1,0 +1,18 @@
+<html layout:decorate="~{/layout/w_navbar}">
+<div layout:fragment="content">
+    <!-- 구현 Start -->
+    <h1>질문 수정</h1>
+
+    <!-- 질문 폼 -->
+    <div th:replace="~{question/fragment/form :: questionFormFragment}"></div>
+
+    <button class="btn btn-sm btn-outline border-gray-300 gap-1"
+            th:onclick="_question_modify()">저장</button>
+    <button class="btn btn-sm btn-outline border-gray-300 gap-1"
+            onclick="location.href='/question'">취소</button>
+    <!-- 구현 End -->
+</div>
+<!-- 스크립트 영역 Start -->
+<script layout:fragment="script" th:src="@{/js/question/modify.js}"></script>
+<!-- 스크립트 영역 End -->
+</html>

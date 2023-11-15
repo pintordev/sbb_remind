@@ -1,0 +1,20 @@
+<html layout:decorate="~{/layout/w_navbar}">
+<div layout:fragment="content">
+    <!-- 구현 Start -->
+    <h1>답변 수정</h1>
+
+    <!-- 답변 폼 -->
+    <form th:object="${answerForm}" method="post" id="answerForm">
+        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+        <textarea th:field="*{content}" cols="30" rows="10" placeholder="내용을 입력하세요"></textarea>
+    </form>
+    <button class="btn btn-sm btn-outline border-gray-300 gap-1"
+            th:attr="onclick=|_answer_modify()|">저장</button>
+    <a class="btn btn-sm btn-outline border-gray-300 gap-1"
+       th:href="@{${cancelRefererUri}}">취소</a>
+    <!-- 구현 End -->
+</div>
+<!-- 스크립트 영역 Start -->
+<script layout:fragment="script" th:src="@{/js/answer/modify.js}"></script>
+<!-- 스크립트 영역 End -->
+</html>

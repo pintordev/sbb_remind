@@ -1,5 +1,6 @@
 package com.pintor.sbb_remind.answer;
 
+import com.pintor.sbb_remind.exception.DataNotFoundException;
 import com.pintor.sbb_remind.member.Member;
 import com.pintor.sbb_remind.question.Question;
 import lombok.RequiredArgsConstructor;
@@ -34,5 +35,22 @@ public class AnswerService {
         Pageable pageable = PageRequest.of(page - 1, 10);
 
         return this.answerRepository.findAllByQuestionOrderByCreateDate(question.getId(), pageable);
+    }
+
+    public Answer getById(Long id) {
+
+        return this.answerRepository.findById(id)
+                .orElseThrow(() -> new DataNotFoundException("answer not found"));
+    }
+
+    public Answer modify(Answer answer, String content) {
+
+        answer = answer.toBuilder()
+                .content(content)
+                .build();
+
+        this.answerRepository.save(answer);
+
+        return answer;
     }
 }

@@ -16,7 +16,7 @@
 - [x] #14 - member login & logout
 - [x] #15 - kakao social login
 - [x] #16 - add author column to question & answer
-- [ ] #17 - question & answer modify
+- [x] #17 - question & answer modify
 - [ ] #18 - question & answer delete
 - [ ] #19 - question & answer like
 - [ ] #20 - question hit
@@ -28,3 +28,4 @@
 - [ ] #26 - recent answer & comment at index page
 - [ ] #27 - profile page
 - [ ] #28 - password find & modify
+- [ ] #29 - template design modify

@@ -6,8 +6,8 @@
     <!-- 질문 폼 -->
     <div th:replace="~{question/fragment/form :: questionFormFragment}"></div>
 
-    <button th:onclick="_question_create()">질문등록</button>
-    <button onclick="location.href='/question'">취소</button>
+    <button class="btn btn-sm btn-outline border-gray-300 gap-1" th:onclick="_question_create()">저장</button>
+    <button class="btn btn-sm btn-outline border-gray-300 gap-1" onclick="location.href='/question'">취소</button>
     <!-- 구현 End -->
 </div>
 <!-- 스크립트 영역 Start -->
