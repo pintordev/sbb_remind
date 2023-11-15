@@ -9,6 +9,9 @@ import lombok.Setter;
 @Setter
 public class QuestionForm {
 
+    @NotEmpty(message = "카테고리는 필수로 입력해주세요")
+    private String category;
+
     @NotEmpty(message = "제목은 필수로 입력해주세요")
     @Size(max = 100)
     private String title;

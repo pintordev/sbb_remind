@@ -20,6 +20,8 @@ import java.util.Set;
 @Entity
 public class Question extends BaseEntity {
 
+    private Integer questionCategory;
+
     @Column(length = 100)
     private String title;
 
@@ -38,4 +40,8 @@ public class Question extends BaseEntity {
     private Long liked;
 
     private Long hit;
+
+    public String getCategory() {
+        return QuestionCategory.getTypeByCode(this.questionCategory);
+    }
 }

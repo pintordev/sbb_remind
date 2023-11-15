@@ -26,9 +26,10 @@ public class QuestionService {
 
     private final QuestionRepository questionRepository;
 
-    public Question create(String title, String content, Member author) {
+    public Question create(String category, String title, String content, Member author) {
 
         Question question = Question.builder()
+                .questionCategory(QuestionCategory.getCodeByType(category))
                 .title(title)
                 .content(content)
                 .author(author)
@@ -54,9 +55,10 @@ public class QuestionService {
                 .orElseThrow(() -> new DataNotFoundException("question not found"));
     }
 
-    public Question modify(Question question, String title, String content) {
+    public Question modify(Question question, String category, String title, String content) {
 
         question = question.toBuilder()
+                .questionCategory(QuestionCategory.getCodeByType(category))
                 .title(title)
                 .content(content)
                 .build();

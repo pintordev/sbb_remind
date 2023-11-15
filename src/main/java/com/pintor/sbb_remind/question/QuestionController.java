@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.security.Principal;
+import java.util.List;
 
 @Slf4j
 @RequestMapping("/question")
@@ -35,27 +36,37 @@ public class QuestionController {
 
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/create")
-    public String create(QuestionForm questionForm) {
+    public String create(Model model, QuestionForm questionForm) {
+
+        List<String> categoryList = QuestionCategory.getList();
+        model.addAttribute("categoryList", categoryList);
 
         return "question/create";
     }
 
     @PreAuthorize("isAuthenticated()")
     @PostMapping("/create")
-    public String create(@Valid QuestionForm questionForm, BindingResult bindingResult,
+    public String create(Model model,
+                         @Valid QuestionForm questionForm, BindingResult bindingResult,
                          Principal principal) {
 
         log.info("question create request");
+        log.info("category: " + questionForm.getCategory());
         log.info("title: " + questionForm.getTitle());
         log.info("content: " + questionForm.getContent());
 
         if (bindingResult.hasErrors()) {
+            List<String> categoryList = QuestionCategory.getList();
+            model.addAttribute("categoryList", categoryList);
 
             return "question/create";
         }
 
         Member author = this.memberService.getByLoginId(principal.getName());
-        Question question = this.questionService.create(questionForm.getTitle(), questionForm.getContent(), author);
+        Question question = this.questionService.create(questionForm.getCategory(),
+                questionForm.getTitle(),
+                questionForm.getContent(),
+                author);
 
         log.info("question has created");
 
@@ -116,7 +127,8 @@ public class QuestionController {
 
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/modify/{id}")
-    public String modify(QuestionForm questionForm,
+    public String modify(Model model,
+                         QuestionForm questionForm,
                          @PathVariable("id") Long id,
                          Principal principal) {
 
@@ -126,6 +138,10 @@ public class QuestionController {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "해당 질문에 대한 수정 권한이 없습니다");
         }
 
+        List<String> categoryList = QuestionCategory.getList();
+        model.addAttribute("categoryList", categoryList);
+
+        questionForm.setCategory(question.getCategory());
         questionForm.setTitle(question.getTitle());
         questionForm.setContent(question.getContent());
 
@@ -134,7 +150,8 @@ public class QuestionController {
 
     @PreAuthorize("isAuthenticated()")
     @PostMapping("/modify/{id}")
-    public String modify(@Valid QuestionForm questionForm, BindingResult bindingResult,
+    public String modify(Model model,
+                         @Valid QuestionForm questionForm, BindingResult bindingResult,
                          @PathVariable("id") Long id,
                          Principal principal) {
 
@@ -145,15 +162,21 @@ public class QuestionController {
         }
 
         log.info("question modify request");
+        log.info("category: " + questionForm.getCategory());
         log.info("title: " + questionForm.getTitle());
         log.info("content: " + questionForm.getContent());
 
         if (bindingResult.hasErrors()) {
+            List<String> categoryList = QuestionCategory.getList();
+            model.addAttribute("categoryList", categoryList);
 
             return "question/modify";
         }
 
-        question = this.questionService.modify(question, questionForm.getTitle(), questionForm.getContent());
+        question = this.questionService.modify(question,
+                questionForm.getCategory(),
+                questionForm.getTitle(),
+                questionForm.getContent());
 
         log.info("question has modified");
 
