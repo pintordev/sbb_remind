@@ -1,8 +1,22 @@
 <html layout:decorate="~{/layout/w_navbar}">
 <div layout:fragment="content">
     <!-- 구현 Start -->
+    <h1 th:text="${question.getCategory()}"></h1>
     <h1 th:text="${question.title}"></h1>
+    <div th:text="${question.author.nickName}"></div>
     <div th:text="${#temporals.format(question.createDate, 'yy.MM.dd HH:mm')}"></div>
+    <div>
+        <span><i class="fa-solid fa-eye"></i></span>
+        <span th:text="${question.hit}"></span>
+    </div>
+    <div>
+        <span><i class="fa-solid fa-heart"></i></span>
+        <span th:text="${question.liked}"></span>
+    </div>
+    <div>
+        <span><i class="fa-solid fa-comment-dots"></i></span>
+        <span th:text="${#lists.size(question.answerList)}"></span>
+    </div>
     <div th:text="${question.content}"></div>
 
     <!-- 질문 수정 -->

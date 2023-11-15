@@ -2,20 +2,28 @@
 <div layout:fragment="content">
     <!-- 구현 Start -->
     <!-- 질문 리스트 -->
-    <table>
+    <table class="w-full text-center">
         <thead>
         <tr>
             <th>번호</th>
+            <th>분류</th>
             <th>제목</th>
-            <th>날짜</th>
+            <th>작성자</th>
+            <th>작성시간</th>
+            <th>조회수</th>
+            <th>좋아요</th>
         </tr>
         </thead>
         <tbody>
         <tr th:each="question, loop : ${questionPaging}">
             <td th:text="${questionPaging.getTotalElements - (questionPaging.number * questionPaging.size) - loop.index}" class="no"></td>
+            <td th:text="${question.getCategory()}"></td>
             <td class="cursor-pointer hover:text-white hover:bg-[#2b3440]" th:text="${question.title}"
                 th:attr="onclick=|_question_detail('${question.id}')|"></td>
-            <td th:text="${#temporals.format(question.createDate, 'yy.MM.dd HH:mm')}"></td>
+            <td th:text="${question.author.nickName}"></td>
+            <td th:text="${#temporals.format(question.createDate, 'yy.MM.dd')}"></td>
+            <td th:text="${question.hit}"></td>
+            <td th:text="${question.liked}"></td>
         </tr>
         </tbody>
     </table>

@@ -21,7 +21,7 @@
 - [x] #19 - question & answer like
 - [x] #20 - question hit
 - [x] #21 - question categorizing
-- [ ] #22 - update detail information to be open
+- [x] #22 - update detail information to be open
 - [ ] #23 - search & sort
 - [ ] #24 - markdown & editor
 - [ ] #25 - comment update
