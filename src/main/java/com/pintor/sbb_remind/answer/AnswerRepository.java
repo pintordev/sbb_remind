@@ -15,7 +15,7 @@ public interface AnswerRepository extends JpaRepository<Answer, Long> {
             + "where a.question_id = :question_id "
             + "order by a.create_date desc "
             , nativeQuery = true)
-    Page<Answer> findAllByQuestionOrderByCreateDate(@Param("question_id") Long questionId, Pageable pageable);
+    Page<Answer> findAllByQuestionOrderByCreateDateDesc(@Param("question_id") Long questionId, Pageable pageable);
 
     @Query(value = "select * "
             + "from answer a "
@@ -29,7 +29,14 @@ public interface AnswerRepository extends JpaRepository<Answer, Long> {
             + "where a.question_id = :question_id "
             + "order by a.liked desc "
             , nativeQuery = true)
-    Page<Answer> findAllByQuestionOrderByLiked(@Param("question_id") Long questionId, Pageable pageable);
+    Page<Answer> findAllByQuestionOrderByLikedDesc(@Param("question_id") Long questionId, Pageable pageable);
 
     List<Answer> findTop10ByOrderByCreateDateDesc();
+
+    @Query(value = "select * "
+            + "from answer a "
+            + "where a.author_id = :author_id "
+            + "order by a.create_date desc "
+            , nativeQuery = true)
+    Page<Answer> findAllByMemberOrderByCreateDateDesc(@Param("author_id") Long authorId, Pageable pageable);
 }

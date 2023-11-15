@@ -1,15 +1,22 @@
 package com.pintor.sbb_remind.member;
 
+import com.pintor.sbb_remind.answer.Answer;
+import com.pintor.sbb_remind.answer.AnswerService;
 import com.pintor.sbb_remind.mail.MailService;
+import com.pintor.sbb_remind.question.Question;
+import com.pintor.sbb_remind.question.QuestionService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -21,6 +28,8 @@ public class MemberController {
 
     private final MemberService memberService;
     private final MailService mailService;
+    private final QuestionService questionService;
+    private final AnswerService answerService;
 
     @GetMapping("/signUp")
     public String signUp(MemberSignUpForm memberSignUpForm) {
@@ -101,6 +110,27 @@ public class MemberController {
         model.addAttribute("errors", errors);
 
         return "member/login";
+    }
+
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping("/profile")
+    public String profile(Model model, Principal principal,
+                          @RequestParam(value = "qPage", defaultValue = "1") int qPage,
+                          @RequestParam(value = "aPage", defaultValue = "1") int aPage) {
+
+        Member member = this.memberService.getByLoginId(principal.getName());
+        model.addAttribute("member", member);
+
+        Page<Question> questionPaging = this.questionService.getListByMember(member, qPage);
+        model.addAttribute("questionPaging", questionPaging);
+
+        Page<Answer> answerPaging = this.answerService.getListByMember(member, aPage);
+        model.addAttribute("answerPaging", answerPaging);
+
+        model.addAttribute("qPage", qPage);
+        model.addAttribute("aPage", aPage);
+
+        return "member/profile";
     }
 
     @GetMapping("/authenticate/{emailAuthenticationCode}")

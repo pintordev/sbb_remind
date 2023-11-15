@@ -18,6 +18,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Getter
 @SuperBuilder(toBuilder = true)
@@ -67,5 +68,9 @@ public class Member extends BaseEntity {
         }
 
         return authorities;
+    }
+
+    public String getAuthoritiesInline() {
+        return this.getAuthorities().stream().map(x -> MemberAuthority.getTypeKorByType(x.getAuthority())).collect(Collectors.joining(", "));
     }
 }

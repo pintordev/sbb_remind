@@ -1,0 +1,135 @@
+<html layout:decorate="~{/layout/w_navbar}">
+<div layout:fragment="content" class="mx-auto w-3/4">
+    <!-- 구현 Start -->
+    <div class="flex justify-between">
+        <h1>사용자 정보</h1>
+        <a href="/member/modify" class="btn btn-sm btn-outline border-gray-300 gap-1">
+            <i class="fa-solid fa-eraser"></i>
+            <span>비밀번호 변경</span>
+        </a>
+    </div>
+    <div class="flex border">
+        <div class="flex-[0_0_15%] bg-gray-400 text-center">권한</div>
+        <div class="flex-auto pl-5" th:text="${member.getAuthoritiesInline()}"></div>
+    </div>
+    <div class="flex border">
+        <div class="flex-[0_0_15%] bg-gray-400 text-center">로그인 ID</div>
+        <div class="flex-auto pl-5" th:text="${member.loginId}"></div>
+    </div>
+    <div class="flex border">
+        <div class="flex-[0_0_15%] bg-gray-400 text-center">닉네임</div>
+        <div class="flex-auto pl-5" th:text="${member.nickName}"></div>
+    </div>
+    <div class="flex border">
+        <div class="flex-[0_0_15%] bg-gray-400 text-center">이름</div>
+        <div class="flex-auto pl-5" th:text="${member.userName}"></div>
+    </div>
+    <div class="flex border">
+        <div class="flex-[0_0_15%] bg-gray-400 text-center">이메일</div>
+        <div class="flex-auto pl-5" th:text="${member.email}"></div>
+    </div>
+    <div class="flex border">
+        <div class="flex-[0_0_15%] bg-gray-400 text-center">가입일</div>
+        <div class="flex-auto pl-5" th:text="${#temporals.format(member.createDate, 'yy.MM.dd HH:mm')}"></div>
+    </div>
+    <div class="flex border">
+        <div class="flex-[0_0_15%] bg-gray-400 text-center">최근 로그인</div>
+        <div class="flex-auto pl-5" th:text="${#temporals.format(member.lastLoginDate, 'yy.MM.dd HH:mm')}"></div>
+    </div>
+
+    <h1>내가 쓴 질문</h1>
+    <!-- 질문 리스트 -->
+    <table class="w-full text-center">
+        <thead>
+        <tr>
+            <th>번호</th>
+            <th>분류</th>
+            <th>제목</th>
+            <th>작성자</th>
+            <th>작성시간</th>
+            <th>조회수</th>
+            <th>좋아요</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="question, loop : ${questionPaging}">
+            <td th:text="${questionPaging.getTotalElements - (questionPaging.number * questionPaging.size) - loop.index}" class="no"></td>
+            <td th:text="${question.getCategory()}"></td>
+            <td class="cursor-pointer hover:text-white hover:bg-[#2b3440]" th:text="${question.title}"
+                th:attr="onclick=|_question_detail('${question.id}')|"></td>
+            <td th:text="${question.author.nickName}"></td>
+            <td th:text="${#temporals.format(question.createDate, 'yy.MM.dd')}"></td>
+            <td th:text="${question.hit}"></td>
+            <td th:text="${question.liked}"></td>
+        </tr>
+        </tbody>
+    </table>
+
+    <!-- 질문 페이징 -->
+    <div class="join" th:if="${!questionPaging.isEmpty()}">
+        <button class="join-item btn btn-sm"
+                th:classappend="${questionPaging.number != 0} ? '' : 'btn-disabled'"
+                th:attr="onclick=|_question_page(1)|">«</button>
+        <button class="join-item btn btn-sm" th:each="page : ${#numbers.sequence(0, questionPaging.totalPages - 1)}"
+                th:if="${page >= questionPaging.number - 2 and page <= questionPaging.number + 2 and questionPaging.number > 1 and questionPaging.number < questionPaging.totalPages - 2}"
+                th:classappend="${page == questionPaging.number} ? 'btn-neutral' : ''"
+                th:attr="onclick=|_question_page('${page + 1}')|" th:text="${page + 1}"></button>
+        <button class="join-item btn btn-sm" th:each="page : ${#numbers.sequence(0, questionPaging.totalPages - 1)}"
+                th:if="${(questionPaging.number <= 1 and page <= 4) or (questionPaging.number >= questionPaging.totalPages - 2 and page >= questionPaging.totalPages - 5)}"
+                th:classappend="${page == questionPaging.number} ? 'btn-neutral' : ''"
+                th:attr="onclick=|_question_page('${page + 1}')|" th:text="${page + 1}"></button>
+        <button class="join-item btn btn-sm"
+                th:classappend="${questionPaging.number != questionPaging.totalPages - 1} ? '' : 'btn-disabled'"
+                th:attr="onclick=|_question_page('${questionPaging.totalPages}')|">»</button>
+    </div>
+
+    <h1>내가 쓴 답변</h1>
+    <!-- 답변 리스트 -->
+    <table class="w-full text-center">
+        <thead>
+        <tr>
+            <th>내용</th>
+            <th>작성자</th>
+            <th>작성시간</th>
+            <th>좋아요</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="answer : ${answerPaging}">
+            <td class="cursor-pointer hover:text-white hover:bg-[#2b3440]" th:utext="${@sbbUtil.markdown(answer.content)}"
+                th:attr="onclick=|_question_detail('${answer.question.id}')|"></td>
+            <td th:text="${answer.author.nickName}"></td>
+            <td th:text="${#temporals.format(answer.createDate, 'yy.MM.dd')}"></td>
+            <td th:text="${answer.liked}"></td>
+        </tr>
+        </tbody>
+    </table>
+
+    <!-- 답변 페이징 -->
+    <div class="join" th:if="${!answerPaging.isEmpty()}">
+        <button class="join-item btn btn-sm"
+                th:classappend="${answerPaging.number != 0} ? '' : 'btn-disabled'"
+                th:attr="onclick=|_answer_page(1)|">«</button>
+        <button class="join-item btn btn-sm" th:each="page : ${#numbers.sequence(0, answerPaging.totalPages - 1)}"
+                th:if="${page >= answerPaging.number - 2 and page <= answerPaging.number + 2 and answerPaging.number > 1 and answerPaging.number < answerPaging.totalPages - 2}"
+                th:classappend="${page == answerPaging.number} ? 'btn-neutral' : ''"
+                th:attr="onclick=|_answer_page('${page + 1}')|" th:text="${page + 1}"></button>
+        <button class="join-item btn btn-sm" th:each="page : ${#numbers.sequence(0, answerPaging.totalPages - 1)}"
+                th:if="${(answerPaging.number <= 1 and page <= 4) or (answerPaging.number >= answerPaging.totalPages - 2 and page >= answerPaging.totalPages - 5)}"
+                th:classappend="${page == answerPaging.number} ? 'btn-neutral' : ''"
+                th:attr="onclick=|_answer_page('${page + 1}')|" th:text="${page + 1}"></button>
+        <button class="join-item btn btn-sm"
+                th:classappend="${answerPaging.number != answerPaging.totalPages - 1} ? '' : 'btn-disabled'"
+                th:attr="onclick=|_answer_page('${answerPaging.totalPages}')|">»</button>
+    </div>
+
+    <form action="/member/profile" method="get" id="pageForm">
+        <input type="hidden" name="qPage" id="qPage" th:value="${qPage}">
+        <input type="hidden" name="aPage" id="aPage" th:value="${aPage}">
+    </form>
+    <!-- 구현 End -->
+</div>
+<!-- 스크립트 영역 Start -->
+<script layout:fragment="script" th:src="@{/js/member/profile.js}"></script>
+<!-- 스크립트 영역 End -->
+</html>

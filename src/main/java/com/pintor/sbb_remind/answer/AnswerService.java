@@ -41,11 +41,11 @@ public class AnswerService {
         log.info("sort: " + sort);
 
         if (sort.equals("liked")) {
-            return this.answerRepository.findAllByQuestionOrderByLiked(question.getId(), pageable);
+            return this.answerRepository.findAllByQuestionOrderByLikedDesc(question.getId(), pageable);
         } else if (sort.equals("old")) {
             return this.answerRepository.findAllByQuestionOrderByCreateDateAsc(question.getId(), pageable);
         } else {
-            return this.answerRepository.findAllByQuestionOrderByCreateDate(question.getId(), pageable);
+            return this.answerRepository.findAllByQuestionOrderByCreateDateDesc(question.getId(), pageable);
         }
     }
 
@@ -99,5 +99,12 @@ public class AnswerService {
 
     public List<Answer> getRecentAnswer() {
         return this.answerRepository.findTop10ByOrderByCreateDateDesc();
+    }
+
+    public Page<Answer> getListByMember(Member member, int page) {
+
+        Pageable pageable = PageRequest.of(page - 1, 10);
+
+        return this.answerRepository.findAllByMemberOrderByCreateDateDesc(member.getId(), pageable);
     }
 }

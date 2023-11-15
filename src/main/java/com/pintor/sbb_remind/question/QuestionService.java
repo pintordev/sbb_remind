@@ -48,11 +48,11 @@ public class QuestionService {
         Pageable pageable = PageRequest.of(page - 1, 10);
 
         if (sort.equals("liked")) {
-            return this.questionRepository.findAllByOrderByLiked(kw, pageable);
+            return this.questionRepository.findAllByOrderByLikedDesc(kw, pageable);
         } else if (sort.equals("old")) {
             return this.questionRepository.findAllByOrderByCreateDateAsc(kw, pageable);
         } else {
-            return this.questionRepository.findAllByOrderByCreateDate(kw, pageable);
+            return this.questionRepository.findAllByOrderByCreateDateDesc(kw, pageable);
         }
     }
 
@@ -201,5 +201,12 @@ public class QuestionService {
 
     public List<Question> getRecentQuestion() {
         return this.questionRepository.findTop10ByOrderByCreateDateDesc();
+    }
+
+    public Page<Question> getListByMember(Member member, int page) {
+
+        Pageable pageable = PageRequest.of(page - 1, 10);
+
+        return this.questionRepository.findAllByMemberOrderByCreateDateDesc(member.getId(), pageable);
     }
 }

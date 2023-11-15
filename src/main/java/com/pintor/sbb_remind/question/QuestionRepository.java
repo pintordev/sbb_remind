@@ -22,7 +22,7 @@ public interface QuestionRepository extends JpaRepository<Question, Long> {
             + "order by q.create_date desc "
             , countQuery = "select count(*) from question"
             , nativeQuery = true)
-    Page<Question> findAllByOrderByCreateDate(@Param("kw") String kw, Pageable pageable);
+    Page<Question> findAllByOrderByCreateDateDesc(@Param("kw") String kw, Pageable pageable);
 
     @Query(value = "select "
             + "distinct q.* "
@@ -50,7 +50,14 @@ public interface QuestionRepository extends JpaRepository<Question, Long> {
             + "order by q.liked desc "
             , countQuery = "select count(*) from question"
             , nativeQuery = true)
-    Page<Question> findAllByOrderByLiked(@Param("kw") String kw, Pageable pageable);
+    Page<Question> findAllByOrderByLikedDesc(@Param("kw") String kw, Pageable pageable);
 
     List<Question> findTop10ByOrderByCreateDateDesc();
+
+    @Query(value = "select * "
+            + "from question q "
+            + "where q.author_id = :author_id "
+            + "order by q.create_date desc "
+            , nativeQuery = true)
+    Page<Question> findAllByMemberOrderByCreateDateDesc(@Param("author_id") Long authorId, Pageable pageable);
 }
