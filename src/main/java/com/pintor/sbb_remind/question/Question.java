@@ -36,4 +36,6 @@ public class Question extends BaseEntity {
     private Set<Member> likedMember;
 
     private Long liked;
+
+    private Long hit;
 }

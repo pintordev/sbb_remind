@@ -6,6 +6,8 @@ import com.pintor.sbb_remind.answer.AnswerService;
 import com.pintor.sbb_remind.member.Member;
 import com.pintor.sbb_remind.member.MemberService;
 import com.pintor.sbb_remind.util.RsData;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -79,7 +81,14 @@ public class QuestionController {
     @GetMapping("/{id}")
     public String detail(Model model, @PathVariable("id") Long id,
                          AnswerForm answerForm,
-                         @RequestParam(value = "aPage", defaultValue = "1") int aPage) {
+                         @RequestParam(value = "aPage", defaultValue = "1") int aPage,
+                         HttpServletRequest request, HttpServletResponse response) {
+
+        Question question = this.questionService.getById(id);
+        if (this.questionService.hitJudge(question, request, response)) {
+            question = this.questionService.hit(question);
+        }
+        model.addAttribute("question", question);
 
         log.info("aPage: " + aPage);
 
@@ -88,9 +97,6 @@ public class QuestionController {
             log.info("required page " + aPage + " has invalid value");
             return String.format("redirect:/question/" + id + "#answer_start");
         }
-
-        Question question = this.questionService.getById(id);
-        model.addAttribute("question", question);
 
         Page<Answer> answerPaging = this.answerService.getList(question, aPage);
 
