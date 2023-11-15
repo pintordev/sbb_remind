@@ -16,8 +16,8 @@
         </div>
         <div class="navbar-end">
             <div class="form-control input input-bordered w-24 md:w-auto flex flex-row pl-3 pr-0 mr-3">
-                <input id="search_box" type="text" placeholder="검색" class="flex-auto" />
-                <button class="btn btn-ghost btn-circle flex-auto">
+                <input id="search_box" type="text" placeholder="검색" class="flex-auto" onkeyup="_searchEnter()"/>
+                <button class="btn btn-ghost btn-circle flex-auto" onclick="_search()">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
                 </button>
             </div>

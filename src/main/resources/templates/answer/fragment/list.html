@@ -1,7 +1,30 @@
 <div th:fragment="answerListFragment">
+
+    <div>
+        <span>댓글 총 </span>
+        <span th:text="${#lists.size(question.answerList)}"></span>
+        <span>개</span>
+
+        <button th:attr="onclick=|_sort('new', '${question.id}', '${answerPaging.number + 1}')|" class="btn btn-sm btn-outline border-gray-300 gap-1"
+                th:classappend="${sort} == 'new' ? 'btn-active btn-neutral' : ''">
+            최신순
+        </button>
+
+        <button th:attr="onclick=|_sort('old', '${question.id}', '${answerPaging.number + 1}')|" class="btn btn-sm btn-outline border-gray-300 gap-1"
+                th:classappend="${sort} == 'old' ? 'btn-active btn-neutral' : ''">
+            과거순
+        </button>
+
+        <button th:attr="onclick=|_sort('liked', '${question.id}', '${answerPaging.number + 1}')|" class="btn btn-sm btn-outline border-gray-300 gap-1"
+                th:classappend="${sort} == 'liked' ? 'btn-active btn-neutral' : ''">
+            추천순
+        </button>
+    </div>
+
     <!-- 답변 리스트 -->
     <a id="answer_start"></a>
     <div th:if="${#lists.size(answerPaging) > 0}" th:each="answer : ${answerPaging}" th:id="|answer_${answer.id}|">
+        <span th:text="${answer.author.nickName}"></span>
         <span th:text="${answer.content}"></span>
         <span th:text="${#temporals.format(answer.createDate, 'yy.MM.dd HH:mm')}"></span>
 
@@ -39,17 +62,19 @@
     <div class="join" th:if="${!answerPaging.isEmpty()}">
         <button class="join-item btn btn-sm"
                 th:classappend="${answerPaging.number != 0} ? '' : 'btn-disabled'"
-                th:attr="onclick=|_answer_page('${question.id}', '1')|">«</button>
+                th:attr="onclick=|_answer_page('${question.id}', '1', '${sort}')|">«</button>
         <button class="join-item btn btn-sm" th:each="page : ${#numbers.sequence(0, answerPaging.totalPages - 1)}"
                 th:if="${page >= answerPaging.number - 2 and page <= answerPaging.number + 2 and answerPaging.number > 1 and answerPaging.number < answerPaging.totalPages - 2}"
                 th:classappend="${page == answerPaging.number} ? 'btn-neutral' : ''"
-                th:attr="onclick=|_answer_page('${question.id}', '${page + 1}')|" th:text="${page + 1}"></button>
+                th:attr="onclick=|_answer_page('${question.id}', '${page + 1}', '${sort}')|" th:text="${page + 1}"></button>
         <button class="join-item btn btn-sm" th:each="page : ${#numbers.sequence(0, answerPaging.totalPages - 1)}"
                 th:if="${(answerPaging.number <= 1 and page <= 4) or (answerPaging.number >= answerPaging.totalPages - 2 and page >= answerPaging.totalPages - 5)}"
                 th:classappend="${page == answerPaging.number} ? 'btn-neutral' : ''"
-                th:attr="onclick=|_answer_page('${question.id}', '${page + 1}')|" th:text="${page + 1}"></button>
+                th:attr="onclick=|_answer_page('${question.id}', '${page + 1}', '${sort}')|" th:text="${page + 1}"></button>
         <button class="join-item btn btn-sm"
                 th:classappend="${answerPaging.number != answerPaging.totalPages - 1} ? '' : 'btn-disabled'"
-                th:attr="onclick=|_answer_page('${question.id}', '${answerPaging.totalPages}')|">»</button>
+                th:attr="onclick=|_answer_page('${question.id}', '${answerPaging.totalPages}', '${sort}')|">»</button>
     </div>
+
+    input
 </div>

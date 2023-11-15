@@ -42,11 +42,17 @@ public class QuestionService {
         return question;
     }
 
-    public Page<Question> getList(int page) {
+    public Page<Question> getList(String kw, String sort, int page) {
 
         Pageable pageable = PageRequest.of(page - 1, 10);
 
-        return this.questionRepository.findAllByOrderByCreateDate(pageable);
+        if (sort.equals("liked")) {
+            return this.questionRepository.findAllByOrderByLiked(kw, pageable);
+        } else if (sort.equals("old")) {
+            return this.questionRepository.findAllByOrderByCreateDateAsc(kw, pageable);
+        } else {
+            return this.questionRepository.findAllByOrderByCreateDate(kw, pageable);
+        }
     }
 
     public Question getById(Long id) {

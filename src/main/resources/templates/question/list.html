@@ -1,6 +1,22 @@
 <html layout:decorate="~{/layout/w_navbar}">
 <div layout:fragment="content">
     <!-- 구현 Start -->
+
+    <button th:attr="onclick=|_sort('new')|" class="btn btn-sm btn-outline border-gray-300 gap-1"
+            th:classappend="${sort} == 'new' ? 'btn-active btn-neutral' : ''">
+        최신순
+    </button>
+
+    <button th:attr="onclick=|_sort('old')|" class="btn btn-sm btn-outline border-gray-300 gap-1"
+            th:classappend="${sort} == 'old' ? 'btn-active btn-neutral' : ''">
+        과거순
+    </button>
+
+    <button th:attr="onclick=|_sort('liked')|" class="btn btn-sm btn-outline border-gray-300 gap-1"
+            th:classappend="${sort} == 'liked' ? 'btn-active btn-neutral' : ''">
+        추천순
+    </button>
+
     <!-- 질문 리스트 -->
     <table class="w-full text-center">
         <thead>
@@ -48,6 +64,8 @@
 
 
     <button class="btn btn-sm" onclick="location.href='/question/create'">질문등록</button>
+
+    <input type="hidden" th:value="${kw}" id="searchedKw">
     <!-- 구현 End -->
 </div>
 <!-- 스크립트 영역 Start -->

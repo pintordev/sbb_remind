@@ -74,9 +74,11 @@ public class QuestionController {
     }
 
     @GetMapping("")
-    public String list(Model model, @RequestParam(value = "page", defaultValue = "1") int page) {
+    public String list(Model model, @RequestParam(value = "page", defaultValue = "1") int page,
+                       @RequestParam(value = "kw", defaultValue = "") String kw,
+                       @RequestParam(value = "sort", defaultValue = "new") String sort) {
 
-        Page<Question> questionPaging = this.questionService.getList(page);
+        Page<Question> questionPaging = this.questionService.getList(kw, sort, page);
 
         // 잘못된 페이지 접근 방어
         if (questionPaging.isEmpty()) {
@@ -85,6 +87,8 @@ public class QuestionController {
         }
 
         model.addAttribute("questionPaging", questionPaging);
+        model.addAttribute("kw", kw);
+        model.addAttribute("sort", sort);
 
         return "question/list";
     }
@@ -93,6 +97,7 @@ public class QuestionController {
     public String detail(Model model, @PathVariable("id") Long id,
                          AnswerForm answerForm,
                          @RequestParam(value = "aPage", defaultValue = "1") int aPage,
+                         @RequestParam(value = "sort", defaultValue = "old") String sort,
                          HttpServletRequest request, HttpServletResponse response) {
 
         Question question = this.questionService.getById(id);
@@ -109,7 +114,7 @@ public class QuestionController {
             return String.format("redirect:/question/" + id + "#answer_start");
         }
 
-        Page<Answer> answerPaging = this.answerService.getList(question, aPage);
+        Page<Answer> answerPaging = this.answerService.getList(question, sort, aPage);
 
         log.info("question id: " + question.getId());
         log.info("total elements: " + answerPaging.getTotalElements());
@@ -121,6 +126,7 @@ public class QuestionController {
         }
 
         model.addAttribute("answerPaging", answerPaging);
+        model.addAttribute("sort", sort);
 
         return "question/detail";
     }

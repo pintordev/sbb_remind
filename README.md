@@ -22,7 +22,7 @@
 - [x] #20 - question hit
 - [x] #21 - question categorizing
 - [x] #22 - update detail information to be open
-- [ ] #23 - search & sort
+- [x] #23 - search & sort
 - [ ] #24 - markdown & editor
 - [ ] #25 - comment update
 - [ ] #26 - recent answer & comment at index page

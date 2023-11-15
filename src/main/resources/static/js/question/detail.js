@@ -15,16 +15,33 @@ function _answer_create(questionId) {
             console.log(res.code + ": " + res.message);
 
             let anchor_tag = "answer_" + res.data.id;
+            let id = res.data.id;
+            let author = res.data.author;
             let content = res.data.content;
             let createDate = res.data.createDate;
-
-            console.log(res);
 
             let template = `
                 <div>
                     <div id="${anchor_tag}">
+                        <span>${author}</span>
                         <span>${content}</span>
                         <span>${createDate}</span>
+
+                        <!-- 답변 수정 -->
+                        <a href="/answer/modify/${id}" class="btn btn-sm btn-outline border-gray-300 gap-1">
+                            <i class="fa-solid fa-eraser"></i>
+                        </a>
+
+                        <!-- 답변 삭제 -->
+                        <button onclick="_answer_delete(${id})" class="btn btn-sm btn-outline border-gray-300 gap-1">
+                            <i class="fa-solid fa-trash"></i>
+                        </button>
+
+                        <!-- 답변 좋아요 -->
+                        <button onclick="_like('answer', ${id})" class="btn btn-sm btn-outline border-gray-300 gap-1"id="answer_${id}_liked">
+                            <i class="fa-solid fa-heart"></i>
+                            <span>0</span>
+                        </button>
                     </div>
                 </div>
             `;
@@ -40,8 +57,10 @@ function _answer_create(questionId) {
 
 }
 
-function _answer_page(questionId, page) {
-    location.href = '/question/' + questionId + '?aPage=' + page;
+function _answer_page(questionId, page, sort) {
+    location.href = '/question/' + questionId
+                    + '?aPage=' + page
+                    + "&sort=" + sort;
 }
 
 function _question_delete(questionId) {
@@ -76,4 +95,10 @@ function _like(target, targetId) {
             alert(res.responseJSON.message);
         }
     })
+}
+
+function _sort(sort, questionId, page) {
+    location.href = "/question/" + questionId
+                    + "?aPage=" + page
+                    + "&sort=" + sort;
 }

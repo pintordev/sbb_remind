@@ -11,7 +11,21 @@ public interface AnswerRepository extends JpaRepository<Answer, Long> {
     @Query(value = "select * "
             + "from answer a "
             + "where a.question_id = :question_id "
-            + "order by a.create_date asc "
+            + "order by a.create_date desc "
             , nativeQuery = true)
     Page<Answer> findAllByQuestionOrderByCreateDate(@Param("question_id") Long questionId, Pageable pageable);
+
+    @Query(value = "select * "
+            + "from answer a "
+            + "where a.question_id = :question_id "
+            + "order by a.create_date asc "
+            , nativeQuery = true)
+    Page<Answer> findAllByQuestionOrderByCreateDateAsc(@Param("question_id") Long questionId, Pageable pageable);
+
+    @Query(value = "select * "
+            + "from answer a "
+            + "where a.question_id = :question_id "
+            + "order by a.liked desc "
+            , nativeQuery = true)
+    Page<Answer> findAllByQuestionOrderByLiked(@Param("question_id") Long questionId, Pageable pageable);
 }

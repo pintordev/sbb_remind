@@ -33,11 +33,19 @@ public class AnswerService {
         return answer;
     }
 
-    public Page<Answer> getList(Question question, int page) {
+    public Page<Answer> getList(Question question, String sort, int page) {
 
         Pageable pageable = PageRequest.of(page - 1, 10);
 
-        return this.answerRepository.findAllByQuestionOrderByCreateDate(question.getId(), pageable);
+        log.info("sort: " + sort);
+
+        if (sort.equals("liked")) {
+            return this.answerRepository.findAllByQuestionOrderByLiked(question.getId(), pageable);
+        } else if (sort.equals("old")) {
+            return this.answerRepository.findAllByQuestionOrderByCreateDateAsc(question.getId(), pageable);
+        } else {
+            return this.answerRepository.findAllByQuestionOrderByCreateDate(question.getId(), pageable);
+        }
     }
 
     public Answer getById(Long id) {
