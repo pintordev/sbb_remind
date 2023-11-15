@@ -138,4 +138,24 @@ public class AnswerController {
 
         return String.format("redirect:" + refererUri);
     }
+
+    @PreAuthorize("isAuthenticated()")
+    @PostMapping("/like/{id}")
+    @ResponseBody
+    public ResponseEntity like(@PathVariable("id") Long id, Principal principal) {
+
+        Answer answer = this.answerService.getById(id);
+
+        if (answer.getAuthor().getLoginId().equals(principal.getName())) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(new RsData<>("F-1", "본인이 작성한 답변은 추천할 수 없습니다", ""));
+        }
+
+        Member member = this.memberService.getByLoginId(principal.getName());
+
+        answer = this.answerService.like(answer, member);
+
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(new RsData<>("S-1", "답변 추천 변경을 완료했습니다", answer.getLiked()));
+    }
 }

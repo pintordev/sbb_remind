@@ -55,3 +55,25 @@ function _answer_delete(answerId) {
         location.href = "/answer/delete/" + answerId;
     }
 }
+
+function _like(target, targetId) {
+    $.ajax({
+        url: "/" + target + "/like/" + targetId,
+        type: "POST",
+        data: "",
+        beforeSend : function() {
+            var token = $("meta[name='_csrf']").attr("content");
+            var header = $("meta[name='_csrf_header']").attr("content");
+            $(document).ajaxSend(function(e, xhr, options) { xhr.setRequestHeader(header, token); });
+        },
+        success: function(res) {
+            console.log(res.code + ": " + res.message);
+            $("#" + target + "_" + targetId + "_liked").toggleClass("btn-active btn-neutral");
+            $("#" + target + "_" + targetId + "_liked" + " > span").text(res.data);
+        },
+        error: function(res) {
+            console.log(res.responseJSON.code + ": " + res.responseJSON.message);
+            alert(res.responseJSON.message);
+        }
+    })
+}

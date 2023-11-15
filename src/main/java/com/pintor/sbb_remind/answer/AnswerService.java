@@ -10,6 +10,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.Set;
+
 @Slf4j
 @RequiredArgsConstructor
 @Service
@@ -23,6 +25,7 @@ public class AnswerService {
                 .content(content)
                 .question(question)
                 .author(author)
+                .liked(0L)
                 .build();
 
         this.answerRepository.save(answer);
@@ -56,5 +59,32 @@ public class AnswerService {
 
     public void delete(Answer answer) {
         this.answerRepository.delete(answer);
+    }
+
+    public Answer like(Answer answer, Member member) {
+
+        Set<Member> likedMember = answer.getLikedMember();
+
+        if (likedMember.contains(member)) {
+
+            likedMember.remove(member);
+
+            answer = answer.toBuilder()
+                    .likedMember(likedMember)
+                    .liked(answer.getLiked() - 1)
+                    .build();
+        } else {
+
+            likedMember.add(member);
+
+            answer = answer.toBuilder()
+                    .likedMember(likedMember)
+                    .liked(answer.getLiked() + 1)
+                    .build();
+        }
+
+        this.answerRepository.save(answer);
+
+        return answer;
     }
 }

@@ -4,18 +4,34 @@
     <div th:if="${#lists.size(answerPaging) > 0}" th:each="answer : ${answerPaging}" th:id="|answer_${answer.id}|">
         <span th:text="${answer.content}"></span>
         <span th:text="${#temporals.format(answer.createDate, 'yy.MM.dd HH:mm')}"></span>
+
         <!-- 답변 수정 -->
         <a sec:authorize="isAuthenticated()" th:href="@{|/answer/modify/${answer.id}|}"
            th:if="${answer.author != null and answer.author.loginId == #authentication.getPrincipal().getUsername()}"
            class="btn btn-sm btn-outline border-gray-300 gap-1">
             <i class="fa-solid fa-eraser"></i>
         </a>
+
         <!-- 답변 삭제 -->
         <button sec:authorize="isAuthenticated()" th:attr="onclick=|_answer_delete('${answer.id}')|"
                 th:if="${answer.author != null and answer.author.loginId == #authentication.getPrincipal().getUsername()}"
                 class="btn btn-sm btn-outline border-gray-300 gap-1">
             <i class="fa-solid fa-trash"></i>
         </button>
+
+        <!-- 답변 좋아요 -->
+        <button sec:authorize="isAuthenticated()" th:attr="onclick=|_like('answer', '${answer.id}')|"
+                class="btn btn-sm btn-outline border-gray-300 gap-1" th:id="@{|answer_${answer.id}_liked|}"
+                th:classappend="${#sets.contains(answer.likedMember, @sbbUtil.nameToMember(#authentication.getPrincipal().getUsername()))} ? 'btn-active btn-neutral' : ''">
+            <i class="fa-solid fa-heart"></i>
+            <span th:text="${answer.liked}"></span>
+        </button>
+
+        <button sec:authorize="isAnonymous()" class="btn btn-sm btn-outline border-gray-300 gap-1" disabled="disabled">
+            <i class="fa-solid fa-heart"></i>
+            <span th:text="${answer.liked}"></span>
+        </button>
+
     </div>
     <a id="answer_last"></a>
 

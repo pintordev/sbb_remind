@@ -5,11 +5,13 @@ import com.pintor.sbb_remind.answer.AnswerForm;
 import com.pintor.sbb_remind.answer.AnswerService;
 import com.pintor.sbb_remind.member.Member;
 import com.pintor.sbb_remind.member.MemberService;
+import com.pintor.sbb_remind.util.RsData;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -165,5 +167,25 @@ public class QuestionController {
         this.questionService.delete(question);
 
         return "redirect:/question";
+    }
+
+    @PreAuthorize("isAuthenticated()")
+    @PostMapping("/like/{id}")
+    @ResponseBody
+    public ResponseEntity like(@PathVariable("id") Long id, Principal principal) {
+
+        Question question = this.questionService.getById(id);
+
+        if (question.getAuthor().getLoginId().equals(principal.getName())) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(new RsData<>("F-1", "본인이 작성한 질문은 추천할 수 없습니다", ""));
+        }
+
+        Member member = this.memberService.getByLoginId(principal.getName());
+
+        question = this.questionService.like(question, member);
+
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(new RsData<>("S-1", "질문 추천 변경을 완료했습니다", question.getLiked()));
     }
 }

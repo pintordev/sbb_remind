@@ -19,6 +19,19 @@
         <i class="fa-solid fa-trash"></i>
     </button>
 
+    <!-- 질문 좋아요 -->
+    <button sec:authorize="isAuthenticated()" th:attr="onclick=|_like('question', '${question.id}')|"
+            class="btn btn-sm btn-outline border-gray-300 gap-1" th:id="@{|question_${question.id}_liked|}"
+            th:classappend="${#sets.contains(question.likedMember, @sbbUtil.nameToMember(#authentication.getPrincipal().getUsername()))} ? 'btn-active btn-neutral' : ''">
+        <i class="fa-solid fa-heart"></i>
+        <span th:text="${question.liked}"></span>
+    </button>
+
+    <button sec:authorize="isAnonymous()" class="btn btn-sm btn-outline border-gray-300 gap-1" disabled="disabled">
+        <i class="fa-solid fa-heart"></i>
+        <span th:text="${question.liked}"></span>
+    </button>
+
     <!-- 답변 목록 -->
     <div th:replace="~{answer/fragment/list :: answerListFragment}"></div>
 
