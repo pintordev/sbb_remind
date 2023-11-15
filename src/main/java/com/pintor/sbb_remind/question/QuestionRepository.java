@@ -6,6 +6,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.util.List;
+
 public interface QuestionRepository extends JpaRepository<Question, Long> {
 
     @Query(value = "select "
@@ -49,4 +51,6 @@ public interface QuestionRepository extends JpaRepository<Question, Long> {
             , countQuery = "select count(*) from question"
             , nativeQuery = true)
     Page<Question> findAllByOrderByLiked(@Param("kw") String kw, Pageable pageable);
+
+    List<Question> findTop10ByOrderByCreateDateDesc();
 }

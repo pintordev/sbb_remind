@@ -10,6 +10,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Set;
 
 @Slf4j
@@ -94,5 +95,9 @@ public class AnswerService {
         this.answerRepository.save(answer);
 
         return answer;
+    }
+
+    public List<Answer> getRecentAnswer() {
+        return this.answerRepository.findTop10ByOrderByCreateDateDesc();
     }
 }

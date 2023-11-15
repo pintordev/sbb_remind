@@ -24,7 +24,7 @@
 - [x] #22 - update detail information to be open
 - [x] #23 - search & sort
 - [x] #24 - markdown & editor
-- [ ] #25 - recent question & answer at index page
+- [x] #25 - recent question & answer at index page
 - [ ] #26 - profile page
 - [ ] #27 - password find & modify
 - [ ] #28 - reply answer update

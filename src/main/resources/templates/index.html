@@ -1,8 +1,57 @@
 <html layout:decorate="~{/layout/w_navbar}">
 <div layout:fragment="content">
     <!-- 구현 Start -->
+    <h1>최근 질문</h1>
+    <!-- 질문 리스트 -->
+    <table class="w-full text-center">
+        <thead>
+        <tr>
+            <th>분류</th>
+            <th>제목</th>
+            <th>작성자</th>
+            <th>작성시간</th>
+            <th>조회수</th>
+            <th>좋아요</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="question : ${recentQuestionList}">
+            <td th:text="${question.getCategory()}"></td>
+            <td class="cursor-pointer hover:text-white hover:bg-[#2b3440]" th:text="${question.title}"
+                th:attr="onclick=|_question_detail('${question.id}')|"></td>
+            <td th:text="${question.author.nickName}"></td>
+            <td th:text="${#temporals.format(question.createDate, 'yy.MM.dd')}"></td>
+            <td th:text="${question.hit}"></td>
+            <td th:text="${question.liked}"></td>
+        </tr>
+        </tbody>
+    </table>
+
+    <h1>최근 답변</h1>
+    <!-- 답변 리스트 -->
+    <table class="w-full text-center">
+        <thead>
+        <tr>
+            <th>내용</th>
+            <th>작성자</th>
+            <th>작성시간</th>
+            <th>좋아요</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="answer : ${recentAnswerList}">
+            <td class="cursor-pointer hover:text-white hover:bg-[#2b3440]" th:utext="${@sbbUtil.markdown(answer.content)}"
+                th:attr="onclick=|_question_detail('${answer.question.id}')|"></td>
+            <td th:text="${answer.author.nickName}"></td>
+            <td th:text="${#temporals.format(answer.createDate, 'yy.MM.dd')}"></td>
+            <td th:text="${answer.liked}"></td>
+        </tr>
+        </tbody>
+    </table>
+
     <!-- 구현 End -->
 </div>
 <!-- 스크립트 영역 Start -->
+<script layout:fragment="script" th:src="@{/js/index/index.js}"></script>
 <!-- 스크립트 영역 End -->
 </html>
