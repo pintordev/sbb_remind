@@ -9,8 +9,13 @@
            th:if="${answer.author != null and answer.author.loginId == #authentication.getPrincipal().getUsername()}"
            class="btn btn-sm btn-outline border-gray-300 gap-1">
             <i class="fa-solid fa-eraser"></i>
-            <span>수정</span>
         </a>
+        <!-- 답변 삭제 -->
+        <button sec:authorize="isAuthenticated()" th:attr="onclick=|_answer_delete('${answer.id}')|"
+                th:if="${answer.author != null and answer.author.loginId == #authentication.getPrincipal().getUsername()}"
+                class="btn btn-sm btn-outline border-gray-300 gap-1">
+            <i class="fa-solid fa-trash"></i>
+        </button>
     </div>
     <a id="answer_last"></a>
 

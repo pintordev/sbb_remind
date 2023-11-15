@@ -43,3 +43,15 @@ function _answer_create(questionId) {
 function _answer_page(questionId, page) {
     location.href = '/question/' + questionId + '?aPage=' + page;
 }
+
+function _question_delete(questionId) {
+    if (confirm("정말 삭제하시겠습니까?")) {
+        location.href = "/question/delete/" + questionId;
+    }
+}
+
+function _answer_delete(answerId) {
+    if (confirm("정말 삭제하시겠습니까?")) {
+        location.href = "/answer/delete/" + answerId;
+    }
+}

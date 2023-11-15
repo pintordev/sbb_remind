@@ -119,4 +119,23 @@ public class AnswerController {
 
         return String.format("redirect:" + refererUri);
     }
+
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping("/delete/{id}")
+    public String delete(@PathVariable("id") Long id,
+                         Principal principal, HttpServletRequest request) {
+
+        Answer answer = this.answerService.getById(id);
+
+        if (!answer.getAuthor().getLoginId().equals(principal.getName())) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "해당 답변에 대한 삭제 권한이 없습니다");
+        }
+
+        String refererUri = request.getHeader("Referer");
+        log.info("referer: " + refererUri);
+
+        this.answerService.delete(answer);
+
+        return String.format("redirect:" + refererUri);
+    }
 }

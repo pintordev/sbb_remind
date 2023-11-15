@@ -51,4 +51,8 @@ public class QuestionService {
 
         return question;
     }
+
+    public void delete(Question question) {
+        this.questionRepository.delete(question);
+    }
 }

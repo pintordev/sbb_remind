@@ -17,7 +17,7 @@
 - [x] #15 - kakao social login
 - [x] #16 - add author column to question & answer
 - [x] #17 - question & answer modify
-- [ ] #18 - question & answer delete
+- [x] #18 - question & answer delete
 - [ ] #19 - question & answer like
 - [ ] #20 - question hit
 - [ ] #21 - question categorizing

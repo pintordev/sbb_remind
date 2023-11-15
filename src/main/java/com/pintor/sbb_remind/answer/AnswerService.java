@@ -53,4 +53,8 @@ public class AnswerService {
 
         return answer;
     }
+
+    public void delete(Answer answer) {
+        this.answerRepository.delete(answer);
+    }
 }
