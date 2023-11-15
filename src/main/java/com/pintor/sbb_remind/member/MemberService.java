@@ -81,4 +81,43 @@ public class MemberService {
 
         this.memberRepository.save(member);
     }
+
+
+    public boolean isPasswordMatched(String encodedPassword, String presentPassword) {
+        return passwordEncoder.matches(presentPassword, encodedPassword);
+    }
+
+    public Member modifyPassword(Member member, String newPassword) {
+
+        member = member.toBuilder()
+                .hasTempPassword(false)
+                .password(passwordEncoder.encode(newPassword))
+                .build();
+
+        this.memberRepository.save(member);
+
+        return member;
+    }
+
+    public Member resetPassword(Member member, String newPassword) {
+
+        member = member.toBuilder()
+                .hasTempPassword(true)
+                .password(passwordEncoder.encode(newPassword))
+                .build();
+
+        this.memberRepository.save(member);
+
+        return member;
+    }
+
+    public Member getByLoginIdAndEmail(String loginId, String email) {
+        return this.memberRepository.findByLoginIdAndEmail(loginId, email)
+                .orElse(null);
+    }
+
+    public Member getByEmail(String email) {
+        return this.memberRepository.findByEmail(email)
+                .orElse(null);
+    }
 }

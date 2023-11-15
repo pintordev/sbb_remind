@@ -25,7 +25,7 @@
 - [x] #23 - search & sort
 - [x] #24 - markdown & editor
 - [x] #25 - recent question & answer at index page
-- [ ] #26 - profile page
-- [ ] #27 - password find & modify
+- [x] #26 - profile page
+- [x] #27 - password find & modify
 - [ ] #28 - reply answer update
 - [ ] #29 - template design modify

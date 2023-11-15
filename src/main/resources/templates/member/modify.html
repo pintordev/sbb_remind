@@ -1,0 +1,55 @@
+<html layout:decorate="~{/layout/wo_navbar}">
+<div layout:fragment="content">
+    <!-- 구현 Start -->
+    <div class="flex-grow flex items-center justify-center py-5">
+        <div class="max-w-2xl w-full px-4">
+            <h1 class="mb-4">
+                <i class="fa-solid fa-eraser"></i>
+                비밀번호 변경
+            </h1>
+
+            <form th:object="${memberPasswordForm}" id="memberPasswordForm" method="post" class="flex flex-col gap-6">
+                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+
+                <div class="form-control">
+                    <label class="label">
+                        <span class="label-text">현재 비밀번호</span>
+                        <span class="label-text" th:if="${#fields.hasErrors('presentPassword')}" th:errors="*{presentPassword}" style="color:red;"></span>
+                    </label>
+                    <input type="password" th:field="*{presentPassword}" placeholder="현재 비밀번호" class="input input-bordered" autofocus />
+                </div>
+
+                <div class="form-control">
+                    <label class="label">
+                        <span class="label-text">새 비밀번호</span>
+                        <span class="label-text" th:if="${#fields.hasErrors('newPassword')}" th:errors="*{newPassword}" style="color:red;"></span>
+                    </label>
+                    <input type="password" th:field="*{newPassword}" placeholder="현재 비밀번호" class="input input-bordered" autofocus />
+                </div>
+
+                <div class="form-control">
+                    <label class="label">
+                        <span class="label-text">새 비밀번호 확인</span>
+                        <span class="label-text" th:if="${#fields.hasErrors('newPasswordConfirm')}" th:errors="*{newPasswordConfirm}" style="color:red;"></span>
+                    </label>
+                    <input type="password" th:field="*{newPasswordConfirm}" placeholder="현재 비밀번호" class="input input-bordered" autofocus />
+                </div>
+
+                <button type="submit" class="btn btn-block btn-outline border-gray-300 gap-1">
+                    <i class="fa-solid fa-eraser"></i>
+                    <span>비밀번호 변경</span>
+                </button>
+
+                <a href="/member/profile" class="btn btn-block btn-outline border-gray-300 gap-1">
+                    <i class="fa-solid fa-rotate-left"></i>
+                    <span>돌아가기</span>
+                </a>
+            </form>
+        </div>
+    </div>
+    <!-- 구현 End -->
+</div>
+<!-- 스크립트 영역 Start -->
+<script layout:fragment="script" th:src="@{/js/member/modify.js}"></script>
+<!-- 스크립트 영역 End -->
+</html>

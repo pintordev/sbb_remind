@@ -1,0 +1,65 @@
+<html layout:decorate="~{/layout/wo_navbar}">
+<div layout:fragment="content">
+    <!-- 구현 Start -->
+    <div class="flex-grow flex items-center justify-center py-5">
+        <div class="max-w-2xl w-full px-4">
+            <h1 class="mb-4">
+                <i class="fa-solid fa-magnifying-glass"></i>
+                아이디 찾기
+            </h1>
+
+            <div class="flex flex-col gap-6 mb-8">
+                <div class="form-control">
+                    <label class="label">
+                        <span class="label-text">이메일</span>
+                        <span class="label-text" id="idFindEmail_error"></span>
+                    </label>
+                    <input type="text" id="idFindEmail" placeholder="가입 시 이메일 입력" class="input input-bordered" autofocus />
+                </div>
+
+                <button type="button" class="btn btn-block btn-outline border-gray-300 gap-1" onclick="_find_loginId()">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                    <span>아이디 찾기</span>
+                </button>
+            </div>
+
+            <h1 class="mb-4">
+                <i class="fa-solid fa-power-off"></i>
+                비밀번호 재발급
+            </h1>
+
+            <div class="flex flex-col gap-6 mb-4">
+                <div class="form-control">
+                    <label class="label">
+                        <span class="label-text">아이디</span>
+                        <span class="label-text" id="pwFindLoginId_error"></span>
+                    </label>
+                    <input type="text" id="pwFindLoginId" placeholder="아이디" class="input input-bordered" autofocus />
+                </div>
+
+                <div class="form-control">
+                    <label class="label">
+                        <span class="label-text">이메일</span>
+                        <span class="label-text" id="pwFindEmail_error"></span>
+                    </label>
+                    <input type="text" id="pwFindEmail" placeholder="가입 시 이메일 입력" class="input input-bordered" autofocus />
+                </div>
+
+                <button type="button" class="btn btn-block btn-outline border-gray-300 gap-1" onclick="_reset_password()">
+                    <i class="fa-solid fa-power-off"></i>
+                    <span>비밀번호 재발급 받기</span>
+                </button>
+            </div>
+
+            <a href="/member/profile" class="btn btn-block btn-outline border-gray-300 gap-1">
+                <i class="fa-solid fa-rotate-left"></i>
+                <span>돌아가기</span>
+            </a>
+        </div>
+    </div>
+    <!-- 구현 End -->
+</div>
+<!-- 스크립트 영역 Start -->
+<script layout:fragment="script" th:src="@{/js/member/find.js}"></script>
+<!-- 스크립트 영역 End -->
+</html>

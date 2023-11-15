@@ -5,11 +5,14 @@ import com.pintor.sbb_remind.answer.AnswerService;
 import com.pintor.sbb_remind.mail.MailService;
 import com.pintor.sbb_remind.question.Question;
 import com.pintor.sbb_remind.question.QuestionService;
+import com.pintor.sbb_remind.util.RsData;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -131,6 +134,94 @@ public class MemberController {
         model.addAttribute("aPage", aPage);
 
         return "member/profile";
+    }
+
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping("/modify")
+    public String modify(MemberPasswordForm memberPasswordForm) {
+        return "member/modify";
+    }
+
+    @PreAuthorize("isAuthenticated()")
+    @PostMapping("/modify")
+    public String modify(@Valid MemberPasswordForm memberPasswordForm, BindingResult bindingResult,
+                         Principal principal) {
+
+        log.info("member password modify request");
+        log.info("presentPassword: " + memberPasswordForm.getPresentPassword());
+        log.info("newPassword: " + memberPasswordForm.getNewPassword());
+        log.info("newPasswordConfirm: " + memberPasswordForm.getNewPasswordConfirm());
+
+        // Form Validation Check
+        if (bindingResult.hasErrors()) {
+            return "member/modify";
+        }
+
+        Member member = this.memberService.getByLoginId(principal.getName());
+
+        // Extra Validation Check
+        if (!this.memberService.isPasswordMatched(member.getPassword(), memberPasswordForm.getPresentPassword())) {
+            bindingResult.rejectValue("presentPassword", "notMatched", "현재 비밀번호가 일치하지 않습니다");
+        }
+
+        if (!memberPasswordForm.getNewPassword().equals(memberPasswordForm.getNewPasswordConfirm())) {
+            bindingResult.rejectValue("newPasswordConfirm", "PasswordNotMatch", "입력한 새 비밀번호가 일치하지 않습니다");
+        }
+
+        if (bindingResult.hasErrors()) {
+            return "member/modify";
+        }
+
+        member = this.memberService.modifyPassword(member, memberPasswordForm.getNewPassword());
+
+        log.info("member password has modified");
+
+        return "redirect:/member/logout";
+    }
+
+    @GetMapping("/find")
+    public String find() {
+
+        return "member/find";
+    }
+
+    @GetMapping("/find/loginId")
+    @ResponseBody
+    public ResponseEntity findLoginId(@RequestParam(value = "email") String email) {
+
+        Member member = this.memberService.getByEmail(email);
+
+        if (member == null) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(new RsData<>("F-1", "입력한 이메일로 가입한 로그인 아이디가 없습니다", ""));
+        }
+
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(new RsData<>("S-1", "입력한 이메일로 가입한 로그인 아이디를 반환합니다", member.getLoginId()));
+    }
+
+    @PostMapping("/find/password")
+    @ResponseBody
+    public ResponseEntity resetPassword(@RequestParam(value = "loginId") String loginId,
+                                        @RequestParam(value = "email") String email) {
+
+        Member member = this.memberService.getByLoginIdAndEmail(loginId, email);
+
+        if (member == null) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(new RsData<>("F-1", "입력한 값으로 가입한 계정을 찾을 수 없습니다", ""));
+        }
+
+        // Member Create
+        String[] codeBits = this.memberService.genSecurityCode(member.getEmail(), 16);
+
+        member = this.memberService.resetPassword(member, codeBits[0]);
+
+        // Authentication Mail Send
+        this.mailService.send(member.getEmail(), codeBits[0], "임시 비밀번호");
+
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(new RsData<>("S-1", "입력한 이메일로 임시 비밀번호를 발송했습니다",""));
     }
 
     @GetMapping("/authenticate/{emailAuthenticationCode}")

@@ -25,6 +25,10 @@ public class MailService {
                 content = "아래 링크로 접속하시면 인증이 완료됩니다.<br>"
                         + "http://localhost:10001/member/authenticate/"
                         + code;
+            } else if (type.equals("임시 비밀번호")) {
+                title = "SBB_Remind " + type + " 발송 메일입니다.";
+                content = "아래 비밀번호로 로그인 하시고 비밀번호를 변경해주세요.<br>"
+                        + code;
             }
 
             helper.setTo(email);
