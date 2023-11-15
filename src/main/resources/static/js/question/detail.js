@@ -1,3 +1,7 @@
+$(function() {
+    _reset();
+});
+
 function _answer_create(questionId) {
 
     $("#questionId").val(questionId);

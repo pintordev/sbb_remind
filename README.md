@@ -23,9 +23,9 @@
 - [x] #21 - question categorizing
 - [x] #22 - update detail information to be open
 - [x] #23 - search & sort
-- [ ] #24 - markdown & editor
-- [ ] #25 - comment update
-- [ ] #26 - recent answer & comment at index page
-- [ ] #27 - profile page
-- [ ] #28 - password find & modify
+- [x] #24 - markdown & editor
+- [ ] #25 - recent question & answer at index page
+- [ ] #26 - profile page
+- [ ] #27 - password find & modify
+- [ ] #28 - reply answer update
 - [ ] #29 - template design modify

@@ -25,7 +25,7 @@
     <a id="answer_start"></a>
     <div th:if="${#lists.size(answerPaging) > 0}" th:each="answer : ${answerPaging}" th:id="|answer_${answer.id}|">
         <span th:text="${answer.author.nickName}"></span>
-        <span th:text="${answer.content}"></span>
+        <span th:utext="${@sbbUtil.markdown(answer.content)}"></span>
         <span th:text="${#temporals.format(answer.createDate, 'yy.MM.dd HH:mm')}"></span>
 
         <!-- 답변 수정 -->
@@ -75,6 +75,4 @@
                 th:classappend="${answerPaging.number != answerPaging.totalPages - 1} ? '' : 'btn-disabled'"
                 th:attr="onclick=|_answer_page('${question.id}', '${answerPaging.totalPages}', '${sort}')|">»</button>
     </div>
-
-    input
 </div>
