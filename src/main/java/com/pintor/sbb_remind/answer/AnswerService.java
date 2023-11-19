@@ -20,13 +20,14 @@ public class AnswerService {
 
     private final AnswerRepository answerRepository;
 
-    public Answer create(String content, Question question, Member author) {
+    public Answer create(String content, Question question, Member author, Answer root) {
 
         Answer answer = Answer.builder()
                 .content(content)
                 .question(question)
                 .author(author)
                 .liked(0L)
+                .isRoot(root == null ? true : false)
                 .build();
 
         this.answerRepository.save(answer);

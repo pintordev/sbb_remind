@@ -27,5 +27,9 @@
 - [x] #25 - recent question & answer at index page
 - [x] #26 - profile page
 - [x] #27 - password find & modify
-- [ ] #28 - reply answer update
-- [ ] #29 - template design modify
+- [x] #28 - answer entity modify for reply answer
+- [ ] #29 - reply answer create
+- [ ] #30 - reply answer modify
+- [ ] #31 - reply answer delete
+- [ ] #32 - reply answer like
+- [ ] #33 - template design modify

@@ -51,7 +51,7 @@ public class AnswerController {
         Question question = this.questionService.getById(answerForm.getQuestionId());
         Member author = this.memberService.getByLoginId(principal.getName());
 
-        Answer answer = this.answerService.create(answerForm.getContent(), question, author);
+        Answer answer = this.answerService.create(answerForm.getContent(), question, author, null);
 
         log.info("answer has created on question #" + question.getId());
 
