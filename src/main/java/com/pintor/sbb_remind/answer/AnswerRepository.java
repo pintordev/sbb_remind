@@ -13,6 +13,7 @@ public interface AnswerRepository extends JpaRepository<Answer, Long> {
     @Query(value = "select * "
             + "from answer a "
             + "where a.question_id = :question_id "
+            + "and a.is_root = true "
             + "order by a.create_date desc "
             , nativeQuery = true)
     Page<Answer> findAllByQuestionOrderByCreateDateDesc(@Param("question_id") Long questionId, Pageable pageable);
@@ -20,6 +21,7 @@ public interface AnswerRepository extends JpaRepository<Answer, Long> {
     @Query(value = "select * "
             + "from answer a "
             + "where a.question_id = :question_id "
+            + "and a.is_root = true "
             + "order by a.create_date asc "
             , nativeQuery = true)
     Page<Answer> findAllByQuestionOrderByCreateDateAsc(@Param("question_id") Long questionId, Pageable pageable);
@@ -27,6 +29,7 @@ public interface AnswerRepository extends JpaRepository<Answer, Long> {
     @Query(value = "select * "
             + "from answer a "
             + "where a.question_id = :question_id "
+            + "and a.is_root = true "
             + "order by a.liked desc "
             , nativeQuery = true)
     Page<Answer> findAllByQuestionOrderByLikedDesc(@Param("question_id") Long questionId, Pageable pageable);
@@ -36,6 +39,7 @@ public interface AnswerRepository extends JpaRepository<Answer, Long> {
     @Query(value = "select * "
             + "from answer a "
             + "where a.author_id = :author_id "
+            + "and a.is_root = true "
             + "order by a.create_date desc "
             , nativeQuery = true)
     Page<Answer> findAllByMemberOrderByCreateDateDesc(@Param("author_id") Long authorId, Pageable pageable);

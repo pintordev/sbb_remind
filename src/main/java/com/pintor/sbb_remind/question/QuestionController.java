@@ -1,7 +1,6 @@
 package com.pintor.sbb_remind.question;
 
 import com.pintor.sbb_remind.answer.Answer;
-import com.pintor.sbb_remind.answer.AnswerForm;
 import com.pintor.sbb_remind.answer.AnswerService;
 import com.pintor.sbb_remind.member.Member;
 import com.pintor.sbb_remind.member.MemberService;
@@ -81,7 +80,7 @@ public class QuestionController {
         Page<Question> questionPaging = this.questionService.getList(kw, sort, page);
 
         // 잘못된 페이지 접근 방어
-        if (questionPaging.isEmpty()) {
+        if (questionPaging.isEmpty() && page != 1) {
             log.info("required page " + page + " does not exist");
             return "redirect:/question";
         }
@@ -95,12 +94,13 @@ public class QuestionController {
 
     @GetMapping("/{id}")
     public String detail(Model model, @PathVariable("id") Long id,
-                         AnswerForm answerForm,
                          @RequestParam(value = "aPage", defaultValue = "1") int aPage,
                          @RequestParam(value = "sort", defaultValue = "old") String sort,
                          HttpServletRequest request, HttpServletResponse response) {
 
         Question question = this.questionService.getById(id);
+
+        // 조회수 증가 여부 판단
         if (this.questionService.hitJudge(question, request, response)) {
             question = this.questionService.hit(question);
         }

@@ -36,22 +36,29 @@ public class AnswerController {
     @PreAuthorize("isAuthenticated()")
     @PostMapping("/create")
     @ResponseBody
-    public ResponseEntity create(@Valid AnswerForm answerForm, BindingResult bindingResult,
+    public ResponseEntity create(@RequestParam("content") String content,
+                                 @RequestParam(value = "qId") Long qId,
+                                 @RequestParam(value = "aId", defaultValue = "-1") Long aId,
+                                 @RequestParam(value = "tId", defaultValue = "-1") Long tId,
                                  Principal principal) {
 
         log.info("answer create request");
-        log.info("content: " + answerForm.getContent());
-        log.info("questionId: " + answerForm.getQuestionId());
+        log.info("content: " + content);
+        log.info("questionId: " + qId);
+        log.info("answerId: " + aId);
+        log.info("tagId: " + tId);
 
-        if (bindingResult.hasErrors()) {
+        if (content.isEmpty()) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body(new RsData<>("F-1", bindingResult.getFieldError("content").getDefaultMessage(), ""));
+                    .body(new RsData<>("F-1", "내용은 필수로 입력해주세요", ""));
         }
 
-        Question question = this.questionService.getById(answerForm.getQuestionId());
+        Question question = this.questionService.getById(qId);
         Member author = this.memberService.getByLoginId(principal.getName());
+        Answer root = this.answerService.getById(aId);
+        Answer tag = this.answerService.getById(tId);
 
-        Answer answer = this.answerService.create(answerForm.getContent(), question, author, null);
+        Answer answer = this.answerService.create(content, author, question, root, tag);
 
         log.info("answer has created on question #" + question.getId());
 
@@ -61,6 +68,9 @@ public class AnswerController {
         answerAttributes.put("content", answer.getContent());
         answerAttributes.put("author", answer.getAuthor().getNickName());
         answerAttributes.put("createDate", answer.getCreateDate().format(DateTimeFormatter.ofPattern("yy.MM.dd HH:mm")));
+        answerAttributes.put("count", answer.getQuestion().getAnswerList().size());
+        answerAttributes.put("tag_id", answer.getTagId());
+        answerAttributes.put("tag_nick_name", answer.getTagNickName());
 
         return ResponseEntity.status(HttpStatus.OK)
                 .body(new RsData<>("S-1", "댓글 등록을 완료했습니다", answerAttributes));

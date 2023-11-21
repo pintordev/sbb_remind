@@ -16,7 +16,15 @@ function _reset() {
                 placeholder: "내용을 입력해주세요",
                 hideIcons: ["guide", "fullscreen", "side-by-side"]
             });
-            $("this").addClass("editor-loaded");
+            $(this).addClass("editor-loaded");
         }
     });
+}
+
+function _isUndefined(id) {
+    if (id === undefined) {
+        return "";
+    } else {
+        return id;
+    }
 }

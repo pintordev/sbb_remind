@@ -28,7 +28,7 @@
 - [x] #26 - profile page
 - [x] #27 - password find & modify
 - [x] #28 - answer entity modify for reply answer
-- [ ] #29 - reply answer create
+- [x] #29 - reply answer create
 - [ ] #30 - reply answer modify
 - [ ] #31 - reply answer delete
 - [ ] #32 - reply answer like

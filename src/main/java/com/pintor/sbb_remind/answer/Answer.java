@@ -40,5 +40,9 @@ public class Answer extends BaseEntity {
     @OneToMany(mappedBy = "root", fetch = FetchType.LAZY, orphanRemoval = true)
     private List<Answer> children;
 
+    private Long tagId;
+
+    private String tagNickName;
+
     private boolean isRoot;
 }

@@ -1,0 +1,55 @@
+<div th:fragment="answerReplyListFragment">
+    <div class="ml-5">
+        <!-- 댓글 리스트 -->
+        <a th:id="|answer${answer.id}_start|"></a>
+        <div th:if="${#lists.size(answer.children) > 0}" th:each="child : ${answer.children}" th:id="|answer${child.id}|">
+            <a class="text-gray-400" th:if="${child.tagId != null}" th:href="@{|#answer${child.tagId}|}" th:text="|@${child.tagNickName}|"></a>
+            <span th:text="${child.author.nickName}"></span>
+            <span th:utext="${@sbbUtil.markdown(child.content)}"></span>
+            <span th:text="${#temporals.format(child.createDate, 'yy.MM.dd HH:mm')}"></span>
+
+            <!-- 댓글 수정 -->
+            <a sec:authorize="isAuthenticated()" th:href="@{|/answer/modify/${child.id}|}"
+               th:if="${child.author != null and child.author.loginId == #authentication.getPrincipal().getUsername()}"
+               class="btn btn-sm btn-outline border-gray-300 gap-1">
+                <i class="fa-solid fa-eraser"></i>
+            </a>
+
+            <!-- 댓글 삭제 -->
+            <button sec:authorize="isAuthenticated()" th:attr="onclick=|_delete('answer', '${child.id}')|"
+                    th:if="${child.author != null and child.author.loginId == #authentication.getPrincipal().getUsername()}"
+                    class="btn btn-sm btn-outline border-gray-300 gap-1">
+                <i class="fa-solid fa-trash"></i>
+            </button>
+
+            <!-- 댓글 좋아요 -->
+            <button sec:authorize="isAuthenticated()" th:attr="onclick=|_like('answer', '${child.id}')|"
+                    class="btn btn-sm btn-outline border-gray-300 gap-1" th:id="@{|answer${child.id}_liked|}"
+                    th:classappend="${#sets.contains(child.likedMember, @sbbUtil.nameToMember(#authentication.getPrincipal().getUsername()))} ? 'btn-active btn-neutral' : ''">
+                <i class="fa-solid fa-heart"></i>
+                <span th:text="${child.liked}"></span>
+            </button>
+
+            <button sec:authorize="isAnonymous()" class="btn btn-sm btn-outline border-gray-300 gap-1" disabled="disabled">
+                <i class="fa-solid fa-heart"></i>
+                <span th:text="${child.liked}"></span>
+            </button>
+
+            <!-- 댓글 작성 버튼 -->
+            <button sec:authorize="isAuthenticated()" th:attr="onclick=|_form_open('${child.id}')|"
+                    class="btn btn-sm btn-outline border-gray-300 gap-1">
+                <span th:text="댓글"></span>
+            </button>
+
+            <!-- 댓글 작성 폼 -->
+            <form th:id="@{|answer${child.id}_form|}" class="hidden">
+                <textarea name="content" placeholder="내용을 입력하세요"></textarea>
+                <button type="button" class="btn btn-sm btn-outline border-gray-300 gap-1"
+                        th:attr="onclick=|_form_close('${child.id}')|">취소</button>
+                <button type="button" class="btn btn-sm btn-outline border-gray-300 gap-1"
+                        th:attr="onclick=|_answer_create('${question.id}', '${answer.id}', '${child.id}')|">댓글등록</button>
+            </form>
+        </div>
+        <a th:id="|answer${answer.id}_last|"></a>
+    </div>
+</div>

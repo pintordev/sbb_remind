@@ -1,7 +1,6 @@
 package com.pintor.sbb_remind.question;
 
 import com.google.gson.Gson;
-import com.pintor.sbb_remind.exception.DataNotFoundException;
 import com.pintor.sbb_remind.member.Member;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
@@ -59,7 +58,7 @@ public class QuestionService {
     public Question getById(Long id) {
 
         return this.questionRepository.findById(id)
-                .orElseThrow(() -> new DataNotFoundException("question not found"));
+                .orElse(null);
     }
 
     public Question modify(Question question, String category, String title, String content) {

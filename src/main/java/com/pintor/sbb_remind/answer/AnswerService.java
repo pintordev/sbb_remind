@@ -1,6 +1,5 @@
 package com.pintor.sbb_remind.answer;
 
-import com.pintor.sbb_remind.exception.DataNotFoundException;
 import com.pintor.sbb_remind.member.Member;
 import com.pintor.sbb_remind.question.Question;
 import lombok.RequiredArgsConstructor;
@@ -20,14 +19,17 @@ public class AnswerService {
 
     private final AnswerRepository answerRepository;
 
-    public Answer create(String content, Question question, Member author, Answer root) {
+    public Answer create(String content, Member author, Question question, Answer root, Answer tag) {
 
         Answer answer = Answer.builder()
                 .content(content)
                 .question(question)
                 .author(author)
                 .liked(0L)
+                .root(root)
                 .isRoot(root == null ? true : false)
+                .tagId(tag != null ? tag.getId() : null)
+                .tagNickName(tag != null ? tag.getAuthor().getNickName() : null)
                 .build();
 
         this.answerRepository.save(answer);
@@ -53,7 +55,7 @@ public class AnswerService {
     public Answer getById(Long id) {
 
         return this.answerRepository.findById(id)
-                .orElseThrow(() -> new DataNotFoundException("answer not found"));
+                .orElse(null);
     }
 
     public Answer modify(Answer answer, String content) {

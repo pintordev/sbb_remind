@@ -3,5 +3,5 @@
         <textarea th:field="*{content}" cols="30" rows="10" placeholder="내용을 입력하세요"></textarea>
         <input type="hidden" th:field="*{questionId}">
     </form>
-    <button th:attr="onclick=|_answer_create('${question.id}')|">답변등록</button>
+    <button th:attr="onclick=|_answer_create('${question.id}', '-1', '-1')|">답변등록</button>
 </div>

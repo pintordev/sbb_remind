@@ -28,7 +28,7 @@
     </a>
 
     <!-- 질문 삭제 -->
-    <button sec:authorize="isAuthenticated()" th:attr="onclick=|_question_delete('${question.id}')|"
+    <button sec:authorize="isAuthenticated()" th:attr="onclick=|_delete('question', '${question.id}')|"
        th:if="${question.author != null and question.author.loginId == #authentication.getPrincipal().getUsername()}"
        class="btn btn-sm btn-outline border-gray-300 gap-1">
         <i class="fa-solid fa-trash"></i>
@@ -36,7 +36,7 @@
 
     <!-- 질문 좋아요 -->
     <button sec:authorize="isAuthenticated()" th:attr="onclick=|_like('question', '${question.id}')|"
-            class="btn btn-sm btn-outline border-gray-300 gap-1" th:id="@{|question_${question.id}_liked|}"
+            class="btn btn-sm btn-outline border-gray-300 gap-1" th:id="@{|question${question.id}_liked|}"
             th:classappend="${#sets.contains(question.likedMember, @sbbUtil.nameToMember(#authentication.getPrincipal().getUsername()))} ? 'btn-active btn-neutral' : ''">
         <i class="fa-solid fa-heart"></i>
         <span th:text="${question.liked}"></span>
@@ -47,16 +47,15 @@
         <span th:text="${question.liked}"></span>
     </button>
 
-    <!-- 답변 목록 -->
+    <!-- 댓글 목록 -->
     <div th:replace="~{answer/fragment/list :: answerListFragment}"></div>
 
-    <!-- 답변 폼 -->
-    <form th:object="${answerForm}" method="post" id="answerForm">
-        <textarea th:field="*{content}" cols="30" rows="10" placeholder="내용을 입력하세요"></textarea>
-        <input type="hidden" th:field="*{questionId}">
+    <!-- 댓글 작성 폼 -->
+    <form id="answer_form">
+        <textarea name="content" placeholder="내용을 입력하세요"></textarea>
+        <button type="button" class="btn btn-sm btn-outline border-gray-300 gap-1"
+                th:attr="onclick=|_answer_create('${question.id}')|">댓글등록</button>
     </form>
-    <button class="btn btn-sm btn-outline border-gray-300 gap-1"
-            th:attr="onclick=|_answer_create('${question.id}')|">답변등록</button>
 
     <!-- 구현 End -->
 </div>
