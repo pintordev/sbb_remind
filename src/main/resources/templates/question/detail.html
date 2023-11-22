@@ -28,7 +28,7 @@
     </a>
 
     <!-- 질문 삭제 -->
-    <button sec:authorize="isAuthenticated()" th:attr="onclick=|_delete('question', '${question.id}')|"
+    <button sec:authorize="isAuthenticated()" th:attr="onclick=|_question_delete('${question.id}')|"
        th:if="${question.author != null and question.author.loginId == #authentication.getPrincipal().getUsername()}"
        class="btn btn-sm btn-outline border-gray-300 gap-1">
         <i class="fa-solid fa-trash"></i>

@@ -16,7 +16,7 @@
             </a>
 
             <!-- 댓글 삭제 -->
-            <button sec:authorize="isAuthenticated()" th:attr="onclick=|_delete('answer', '${child.id}')|"
+            <button sec:authorize="isAuthenticated()" th:attr="onclick=|_answer_delete('${child.id}')|"
                     th:if="${child.author != null and child.author.loginId == #authentication.getPrincipal().getUsername()}"
                     class="btn btn-sm btn-outline border-gray-300 gap-1">
                 <i class="fa-solid fa-trash"></i>

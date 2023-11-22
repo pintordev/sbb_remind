@@ -97,17 +97,19 @@ function _answer_page(questionId, page, sort) {
                     + "&sort=" + sort;
 }
 
-function _delete(target, targetId) {
+function _question_delete(targetId) {
     if (confirm("정말 삭제하시겠습니까?")) {
-        location.href = "/" + target + "/delete/" + targetId;
+        location.href = "/question/delete/" + targetId;
     }
 }
 
 function _like(target, targetId) {
     $.ajax({
-        url: "/" + target + "/like/" + targetId,
+        url: "/" + target + "/like",
         type: "POST",
-        data: "",
+        data: {
+            "id": targetId
+        },
         beforeSend : function() {
             var token = $("meta[name='_csrf']").attr("content");
             var header = $("meta[name='_csrf_header']").attr("content");
@@ -115,8 +117,8 @@ function _like(target, targetId) {
         },
         success: function(res) {
             console.log(res.code + ": " + res.message);
-            $("#" + target + targetId + "_liked").toggleClass("btn-active btn-neutral");
-            $("#" + target + targetId + "_liked" + " > span").text(res.data);
+            $("#" + target + res.data.id + "_liked").toggleClass("btn-active btn-neutral");
+            $("#" + target + res.data.id + "_liked" + " > span").text(res.data.liked);
         },
         error: function(res) {
             console.log(res.responseJSON.code + ": " + res.responseJSON.message);
@@ -152,4 +154,29 @@ function _get_content(id) {
     })
 
     return content.join(" ");
+}
+
+function _answer_delete(id) {
+    if (confirm("정말 삭제하시겠습니까?")) {
+        $.ajax({
+            url: "/answer/delete",
+            type: "POST",
+            data: {
+                "id": id
+            },
+            beforeSend : function() {
+                var token = $("meta[name='_csrf']").attr("content");
+                var header = $("meta[name='_csrf_header']").attr("content");
+                $(document).ajaxSend(function(e, xhr, options) { xhr.setRequestHeader(header, token); });
+            },
+            success: function(res) {
+                console.log(res.code + ": " + res.message);
+                $("#answer" + res.data).remove();
+            },
+            error: function(res) {
+                console.log(res.responseJSON.code + ": " + res.responseJSON.message);
+                alert(res.responseJSON.message);
+            }
+        })
+    }
 }

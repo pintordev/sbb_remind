@@ -69,8 +69,9 @@ public class AnswerService {
         return answer;
     }
 
-    public void delete(Answer answer) {
+    public Answer delete(Answer answer) {
         this.answerRepository.delete(answer);
+        return answer;
     }
 
     public Answer like(Answer answer, Member member) {

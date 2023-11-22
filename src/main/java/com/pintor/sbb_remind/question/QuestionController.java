@@ -21,7 +21,9 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.security.Principal;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Slf4j
 @RequestMapping("/question")
@@ -199,15 +201,21 @@ public class QuestionController {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "해당 질문에 대한 삭제 권한이 없습니다");
         }
 
+        log.info("question delete request");
+        log.info("id: " + id);
+
         this.questionService.delete(question);
+
+        log.info("question has deleted");
 
         return "redirect:/question";
     }
 
     @PreAuthorize("isAuthenticated()")
-    @PostMapping("/like/{id}")
+    @PostMapping("/like")
     @ResponseBody
-    public ResponseEntity like(@PathVariable("id") Long id, Principal principal) {
+    public ResponseEntity like(@RequestParam("id") Long id,
+                               Principal principal) {
 
         Question question = this.questionService.getById(id);
 
@@ -216,11 +224,21 @@ public class QuestionController {
                     .body(new RsData<>("F-1", "본인이 작성한 질문은 추천할 수 없습니다", ""));
         }
 
+        log.info("question like request");
+        log.info("id: " + id);
+
         Member member = this.memberService.getByLoginId(principal.getName());
 
         question = this.questionService.like(question, member);
 
+        log.info("question liked has toggled");
+
+        Map<String, Object> questionAttributes = new HashMap<>();
+
+        questionAttributes.put("id", question.getId());
+        questionAttributes.put("liked", question.getLiked());
+
         return ResponseEntity.status(HttpStatus.OK)
-                .body(new RsData<>("S-1", "질문 추천 변경을 완료했습니다", question.getLiked()));
+                .body(new RsData<>("S-1", "질문 추천 변경을 완료했습니다", questionAttributes));
     }
 }

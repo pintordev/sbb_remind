@@ -131,41 +131,57 @@ public class AnswerController {
     }
 
     @PreAuthorize("isAuthenticated()")
-    @GetMapping("/delete/{id}")
-    public String delete(@PathVariable("id") Long id,
-                         Principal principal, HttpServletRequest request) {
+    @PostMapping("/delete")
+    @ResponseBody
+    public ResponseEntity delete(@RequestParam("id") Long id,
+                                 Principal principal) {
 
         Answer answer = this.answerService.getById(id);
 
         if (!answer.getAuthor().getLoginId().equals(principal.getName())) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "해당 답변에 대한 삭제 권한이 없습니다");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(new RsData<>("F-1", "해당 댓글에 대한 삭제 권한이 없습니다", ""));
         }
 
-        String refererUri = request.getHeader("Referer");
-        log.info("referer: " + refererUri);
+        log.info("answer delete request");
+        log.info("id: " + id);
 
-        this.answerService.delete(answer);
+        answer = this.answerService.delete(answer);
 
-        return String.format("redirect:" + refererUri);
+        log.info("answer has deleted");
+
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(new RsData<>("S-1", "댓글 삭제를 완료했습니다", answer.getId()));
     }
 
     @PreAuthorize("isAuthenticated()")
-    @PostMapping("/like/{id}")
+    @PostMapping("/like")
     @ResponseBody
-    public ResponseEntity like(@PathVariable("id") Long id, Principal principal) {
+    public ResponseEntity like(@RequestParam("id") Long id,
+                               Principal principal) {
 
         Answer answer = this.answerService.getById(id);
 
         if (answer.getAuthor().getLoginId().equals(principal.getName())) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body(new RsData<>("F-1", "본인이 작성한 답변은 추천할 수 없습니다", ""));
+                    .body(new RsData<>("F-1", "본인이 작성한 댓글은 추천할 수 없습니다", ""));
         }
+
+        log.info("answer like request");
+        log.info("id: " + id);
 
         Member member = this.memberService.getByLoginId(principal.getName());
 
         answer = this.answerService.like(answer, member);
 
+        log.info("answer liked has toggled");
+
+        Map<String, Object> answerAttributes = new HashMap<>();
+
+        answerAttributes.put("id", answer.getId());
+        answerAttributes.put("liked", answer.getLiked());
+
         return ResponseEntity.status(HttpStatus.OK)
-                .body(new RsData<>("S-1", "답변 추천 변경을 완료했습니다", answer.getLiked()));
+                .body(new RsData<>("S-1", "댓글 추천 변경을 완료했습니다", answerAttributes));
     }
 }

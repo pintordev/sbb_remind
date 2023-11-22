@@ -35,7 +35,7 @@ public class MemberService {
 
     public String[] genSecurityCode(String prev, int length) {
 
-        String candidateCode = "0123456789abcdefghijklmnopqrstuvwxyz!@#$%^&";
+        String candidateCode = "0123456789abcdefghijklmnopqrstuvwxyz";
         SecureRandom secureRandom = new SecureRandom();
 
         String code = "";
