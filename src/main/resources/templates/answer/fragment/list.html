@@ -26,6 +26,7 @@
     <div th:if="${#lists.size(answerPaging) > 0}" th:each="answer : ${answerPaging}" th:id="|answer${answer.id}|">
         <span th:text="${answer.author.nickName}"></span>
         <span th:utext="${@sbbUtil.markdown(answer.content)}"></span>
+
         <span th:text="${#temporals.format(answer.createDate, 'yy.MM.dd HH:mm')}"></span>
 
         <!-- 댓글 수정 -->
@@ -34,6 +35,14 @@
            class="btn btn-sm btn-outline border-gray-300 gap-1">
             <i class="fa-solid fa-eraser"></i>
         </a>
+
+        <!-- 댓글 수정 -->
+        <button sec:authorize="isAuthenticated()" th:attr="onclick=|_modify_form_open('${answer.id}')|"
+           th:if="${answer.author != null and answer.author.loginId == #authentication.getPrincipal().getUsername()}"
+           class="btn btn-sm btn-outline border-gray-300 gap-1">
+            <i class="fa-solid fa-eraser"></i>
+            작업중
+        </button>
 
         <!-- 댓글 삭제 -->
         <button sec:authorize="isAuthenticated()" th:attr="onclick=|_answer_delete('${answer.id}')|"
@@ -44,7 +53,7 @@
 
         <!-- 댓글 좋아요 -->
         <button sec:authorize="isAuthenticated()" th:attr="onclick=|_like('answer', '${answer.id}')|"
-                class="btn btn-sm btn-outline border-gray-300 gap-1" th:id="@{|answer${answer.id}_liked|}"
+                class="btn btn-sm btn-outline border-gray-300 gap-1" th:id="|answer${answer.id}_liked|"
                 th:classappend="${#sets.contains(answer.likedMember, @sbbUtil.nameToMember(#authentication.getPrincipal().getUsername()))} ? 'btn-active btn-neutral' : ''">
             <i class="fa-solid fa-heart"></i>
             <span th:text="${answer.liked}"></span>
@@ -62,10 +71,10 @@
         </button>
 
         <!-- 댓글 작성 폼 -->
-        <form th:id="@{|answer${answer.id}_form|}" class="hidden">
-            <textarea name="content" placeholder="내용을 입력하세요"></textarea>
+        <form th:id="|answer${answer.id}_form|" class="hidden">
+            <textarea name="content" th:id="|answer${answer.id}_form_text|" placeholder="내용을 입력하세요"></textarea>
             <button type="button" class="btn btn-sm btn-outline border-gray-300 gap-1"
-                    th:attr="onclick=|_form_close('${answer.id}')|">취소</button>
+                    th:onclick="_form_close()">취소</button>
             <button type="button" class="btn btn-sm btn-outline border-gray-300 gap-1"
                     th:attr="onclick=|_answer_create('${question.id}', '${answer.id}')|">댓글등록</button>
         </form>

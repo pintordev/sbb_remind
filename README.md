@@ -30,5 +30,7 @@
 - [x] #28 - answer entity modify for reply answer
 - [x] #29 - reply answer create & like
 - [x] #30 - reply answer delete
-- [ ] #31 - reply answer modify
-- [ ] #33 - template design modify
+- [x] #31 - markdown editor generation update
+- [ ] #32 - answer & reply answer create fix
+- [ ] #33 - reply answer modify
+- [ ] #34 - template design modify

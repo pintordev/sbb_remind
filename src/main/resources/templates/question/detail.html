@@ -52,7 +52,7 @@
 
     <!-- 댓글 작성 폼 -->
     <form id="answer_form">
-        <textarea name="content" placeholder="내용을 입력하세요"></textarea>
+        <textarea name="content" id="answer_form_text" placeholder="내용을 입력하세요"></textarea>
         <button type="button" class="btn btn-sm btn-outline border-gray-300 gap-1"
                 th:attr="onclick=|_answer_create('${question.id}')|">댓글등록</button>
     </form>

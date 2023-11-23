@@ -24,7 +24,7 @@
 
             <!-- 댓글 좋아요 -->
             <button sec:authorize="isAuthenticated()" th:attr="onclick=|_like('answer', '${child.id}')|"
-                    class="btn btn-sm btn-outline border-gray-300 gap-1" th:id="@{|answer${child.id}_liked|}"
+                    class="btn btn-sm btn-outline border-gray-300 gap-1" th:id="|answer${child.id}_liked|"
                     th:classappend="${#sets.contains(child.likedMember, @sbbUtil.nameToMember(#authentication.getPrincipal().getUsername()))} ? 'btn-active btn-neutral' : ''">
                 <i class="fa-solid fa-heart"></i>
                 <span th:text="${child.liked}"></span>
@@ -42,10 +42,10 @@
             </button>
 
             <!-- 댓글 작성 폼 -->
-            <form th:id="@{|answer${child.id}_form|}" class="hidden">
-                <textarea name="content" placeholder="내용을 입력하세요"></textarea>
+            <form th:id="|answer${child.id}_form|" class="hidden">
+                <textarea name="content" th:id="|answer${child.id}_form_text|" placeholder="내용을 입력하세요"></textarea>
                 <button type="button" class="btn btn-sm btn-outline border-gray-300 gap-1"
-                        th:attr="onclick=|_form_close('${child.id}')|">취소</button>
+                        th:onclick="_form_close()">취소</button>
                 <button type="button" class="btn btn-sm btn-outline border-gray-300 gap-1"
                         th:attr="onclick=|_answer_create('${question.id}', '${answer.id}', '${child.id}')|">댓글등록</button>
             </form>

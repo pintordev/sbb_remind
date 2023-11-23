@@ -1,11 +1,20 @@
+let answer_mde;
+let reply_answer_mde;
+
 $(function() {
-    _reset();
+    answer_mde = new SimpleMDE({
+        element: $("#answer_form_text")[0],
+        placeholder: "내용을 입력해주세요",
+        hideIcons: ["guide", "fullscreen", "side-by-side"]
+    });
 });
 
 function _answer_create(qId, aId, tId) {
 
     aId = _isUndefined(aId);
     let target = tId === undefined ? aId : tId;
+
+    alert(_get_content_2(target));
 
     $.ajax({
         url: "/answer/create",
@@ -134,11 +143,19 @@ function _sort(sort, questionId, page) {
 }
 
 function _form_open(id) {
-    $("#answer" + id + "_form").removeClass("hidden");
+    if(!$("#answer" + id + "_form").hasClass("opened")) {
+        if (reply_answer_mde !== undefined) _form_close();
+        _gen_mde(id);
+        $("#answer" + id + "_form").removeClass("hidden");
+        $("#answer" + id + "_form").addClass("opened");
+    }
 }
 
-function _form_close(id) {
-    if (id !== "") $("#answer" + id + "_form").addClass("hidden");
+function _form_close() {
+    $("form.opened").addClass("hidden");
+    _return_mde();
+    $("form.opened > textarea").text("");
+    $("form.opened").removeClass("opened");
 }
 
 function _form_clear(id) {
@@ -156,6 +173,15 @@ function _get_content(id) {
     return content.join(" ");
 }
 
+function _get_content_2(id) {
+    let content = [];
+
+    $("#answer" + id + "_form div.CodeMirror-code > pre.CodeMirror-line span").each(function() {
+            content.push($(this).text());
+    })
+
+    return content.join(" ");
+}
 function _answer_delete(id) {
     if (confirm("정말 삭제하시겠습니까?")) {
         $.ajax({
@@ -179,4 +205,16 @@ function _answer_delete(id) {
             }
         })
     }
+}
+
+function _gen_mde(n) {
+    reply_answer_mde = new SimpleMDE({
+        element: $("#answer" + n + "_form_text")[0],
+        placeholder: "내용을 입력해주세요",
+        hideIcons: ["guide", "fullscreen", "side-by-side"]
+    });
+}
+
+function _return_mde() {
+    reply_answer_mde.toTextArea();
 }
