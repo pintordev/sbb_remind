@@ -12,15 +12,12 @@ $(function() {
 function _answer_create(qId, aId, tId) {
 
     aId = _isUndefined(aId);
-    let target = tId === undefined ? aId : tId;
-
-    alert(_get_content_2(target));
 
     $.ajax({
         url: "/answer/create",
         type: "POST",
         data: {
-            "content": _get_content(target),
+            "content": _get_content(aId),
             "qId": qId,
             "aId": aId,
             "tId": tId
@@ -41,11 +38,13 @@ function _answer_create(qId, aId, tId) {
             let count = res.data.count;
             let tag_id = res.data.tag_id;
             let tag_nick_name = res.data.tag_nick_name;
+            let a_id = res.data.a_id;
+            let t_id = res.data.t_id;
 
             let template = `
                 <div id="${anchor_tag}">
                     <span>${author}</span>
-                    <span><p>${content}</p></span>
+                    <span>${content}</span>
                     <span>${createDate}</span>
 
                     <!-- 댓글 수정 -->
@@ -54,7 +53,7 @@ function _answer_create(qId, aId, tId) {
                     </a>
 
                     <!-- 댓글 삭제 -->
-                    <button class="btn btn-sm btn-outline border-gray-300 gap-1" onclick="_delete('answer', ${id})">
+                    <button class="btn btn-sm btn-outline border-gray-300 gap-1" onclick="_answer_delete(${id})">
                         <i class="fa-solid fa-trash"></i>
                     </button>
 
@@ -72,8 +71,8 @@ function _answer_create(qId, aId, tId) {
                     <!-- 댓글 작성 폼 -->
                     <form id="answer${id}_form" class="hidden">
                         <textarea name="content" placeholder="내용을 입력하세요"></textarea>
-                        <button type="button" class="btn btn-sm btn-outline border-gray-300 gap-1" onclick="_form_close(${id})">취소</button>
-                        <button type="button" class="btn btn-sm btn-outline border-gray-300 gap-1" onclick="_answer_create(${qId}, ${aId}, ${id})">댓글등록</button>
+                        <button type="button" class="btn btn-sm btn-outline border-gray-300 gap-1" onclick="_form_close()">취소</button>
+                        <button type="button" class="btn btn-sm btn-outline border-gray-300 gap-1" onclick="_answer_create(${qId}, ${a_id}, ${t_id})">댓글등록</button>
                     </form>
                 </div>
             `;
@@ -86,10 +85,26 @@ function _answer_create(qId, aId, tId) {
                 $("#" + anchor_tag).prepend(sub_template);
             }
 
-            _form_close(target);
+            if (aId === "") {
+                let sub_template = `
+                    <!-- 대댓글 목록 -->
+                    <div>
+                        <div class="ml-5">
+                            <!-- 댓글 리스트 -->
+                            <a id="answer${id}_start"></a>
 
-            _form_clear(target);
-            _reset();
+                            <a id="answer${id}_last"></a>
+                        </div>
+                    </div>
+                `;
+                $("#" + anchor_tag).append(sub_template);
+            }
+
+            if (aId === "") {
+                _form_clear();
+            } else {
+                _form_close();
+            }
 
             $("#answer_count").text(count);
         },
@@ -154,34 +169,18 @@ function _form_open(id) {
 function _form_close() {
     $("form.opened").addClass("hidden");
     _return_mde();
-    $("form.opened > textarea").text("");
     $("form.opened").removeClass("opened");
 }
 
-function _form_clear(id) {
-    $("#answer" + id + "_form > textarea").removeClass("editor-loaded");
-    $("#answer" + id + "_form > div").remove();
+function _form_clear() {
+    answer_mde.value("");
 }
 
 function _get_content(id) {
-    let content = [];
-
-    $("#answer" + id + "_form span.cm-null.cm-spell-error").each(function() {
-        content.push($(this).text());
-    })
-
-    return content.join(" ");
+    if (id === "") return answer_mde.value();
+    return reply_answer_mde.value();
 }
 
-function _get_content_2(id) {
-    let content = [];
-
-    $("#answer" + id + "_form div.CodeMirror-code > pre.CodeMirror-line span").each(function() {
-            content.push($(this).text());
-    })
-
-    return content.join(" ");
-}
 function _answer_delete(id) {
     if (confirm("정말 삭제하시겠습니까?")) {
         $.ajax({
@@ -209,12 +208,13 @@ function _answer_delete(id) {
 
 function _gen_mde(n) {
     reply_answer_mde = new SimpleMDE({
-        element: $("#answer" + n + "_form_text")[0],
+        element: $("#answer" + n + "_form > textarea")[0],
         placeholder: "내용을 입력해주세요",
         hideIcons: ["guide", "fullscreen", "side-by-side"]
     });
 }
 
 function _return_mde() {
+    reply_answer_mde.value("");
     reply_answer_mde.toTextArea();
 }

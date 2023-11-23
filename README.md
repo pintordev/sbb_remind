@@ -31,6 +31,6 @@
 - [x] #29 - reply answer create & like
 - [x] #30 - reply answer delete
 - [x] #31 - markdown editor generation update
-- [ ] #32 - answer & reply answer create fix
+- [x] #32 - answer & reply answer create fix
 - [ ] #33 - reply answer modify
 - [ ] #34 - template design modify

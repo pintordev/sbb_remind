@@ -72,7 +72,7 @@
 
         <!-- 댓글 작성 폼 -->
         <form th:id="|answer${answer.id}_form|" class="hidden">
-            <textarea name="content" th:id="|answer${answer.id}_form_text|" placeholder="내용을 입력하세요"></textarea>
+            <textarea name="content" placeholder="내용을 입력하세요"></textarea>
             <button type="button" class="btn btn-sm btn-outline border-gray-300 gap-1"
                     th:onclick="_form_close()">취소</button>
             <button type="button" class="btn btn-sm btn-outline border-gray-300 gap-1"

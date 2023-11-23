@@ -5,6 +5,7 @@ import com.pintor.sbb_remind.member.MemberService;
 import com.pintor.sbb_remind.question.Question;
 import com.pintor.sbb_remind.question.QuestionService;
 import com.pintor.sbb_remind.util.RsData;
+import com.pintor.sbb_remind.util.SbbUtil;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -32,6 +33,7 @@ public class AnswerController {
     private final AnswerService answerService;
     private final QuestionService questionService;
     private final MemberService memberService;
+    private final SbbUtil sbbUtil;
 
     @PreAuthorize("isAuthenticated()")
     @PostMapping("/create")
@@ -65,12 +67,14 @@ public class AnswerController {
         Map<String, Object> answerAttributes = new HashMap<>();
 
         answerAttributes.put("id", answer.getId());
-        answerAttributes.put("content", answer.getContent());
+        answerAttributes.put("content", this.sbbUtil.markdown(answer.getContent()));
         answerAttributes.put("author", answer.getAuthor().getNickName());
         answerAttributes.put("createDate", answer.getCreateDate().format(DateTimeFormatter.ofPattern("yy.MM.dd HH:mm")));
         answerAttributes.put("count", answer.getQuestion().getAnswerList().size());
         answerAttributes.put("tag_id", answer.getTagId());
         answerAttributes.put("tag_nick_name", answer.getTagNickName());
+        answerAttributes.put("a_id", answer.isRoot() ? answer.getId() : answer.getRoot().getId());
+        answerAttributes.put("t_id", answer.isRoot() ? "" : answer.getId());
 
         return ResponseEntity.status(HttpStatus.OK)
                 .body(new RsData<>("S-1", "댓글 등록을 완료했습니다", answerAttributes));

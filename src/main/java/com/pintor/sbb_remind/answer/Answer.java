@@ -45,4 +45,8 @@ public class Answer extends BaseEntity {
     private String tagNickName;
 
     private boolean isRoot;
+
+    public boolean isRoot() {
+        return this.isRoot;
+    }
 }
